@@ -1,0 +1,17 @@
+﻿@model HeaderLinksModel
+@using Nop.Web.Models.Common;
+<div class="header-links">
+    <ul>
+        @Html.Widget("header_links_before")
+        @if (Model.IsAuthenticated)
+        {
+            <li class="first-list"><a href="@Url.RouteUrl("CustomerInfo")" class="ico-account">Olá, @Model.CustomerName</a></li>
+            <li><a href="@Url.RouteUrl("CustomerInfo")" class="ico-logout">@T("Moveleiros.Account.MyAccount")</a></li>
+        }
+        else
+        {
+            @*<li><a href="@Url.RouteUrl("Register")" class="ico-register">@T("Account.Register")</a></li>*@
+            <li class="access-sub"><a href="@Url.RouteUrl("Login")" class="ico-login">@T("Moveleiros.Account.Login")</a></li>
+        }
+    </ul>
+</div>

@@ -1,0 +1,131 @@
+﻿@model BrandModel
+
+@Html.ValidationSummary(false)
+@Html.HiddenFor(model => model.Id)
+
+<script>
+    $(document).ready(function() {
+        bindBootstrapTabSelectEvent('brand-edit');
+    });
+</script>
+
+<div class="content">
+    <div class="form-horizontal">
+        <div class="row">
+            @*<div class="col-md-12 clearfix">
+                <div class="pull-left">
+                    @Html.Action("Mode", "Setting", new { modeName = "manufacturer-advanced-mode" })
+                </div>
+            </div>*@
+        </div>
+        <div id="manufacturer-edit" class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                @Html.RenderBootstrapTabHeader("tab-info", @T("Moveleiros.Admin.Catalog.Brands.Info"), true)
+                @Html.RenderBootstrapTabHeader("tab-seo", @T("Admin.Common.SEO"), customCssClass: "advanced-setting")
+            </ul>
+            <div class="tab-content">
+                @Html.RenderBootstrapTabContent("tab-info", @TabInfo(), true)
+                @Html.RenderBootstrapTabContent("tab-seo", @TabSeo())
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    //custom tabs
+    var eventMessage = new AdminTabStripCreated(this.Html, "brand-edit");
+    EngineContext.Current.Resolve<IEventPublisher>().Publish(eventMessage);
+    foreach (var eventBlock in eventMessage.BlocksToRender)
+    {
+        @eventBlock
+    }
+}
+
+@*save selected tab name*@
+<input type="hidden" id="selected-tab-name" name="selected-tab-name" value="@(Html.GetSelectedTabName())">
+
+@helper TabInfo()
+{
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-body">
+    
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.Name)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.Name)
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.PictureId)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.PictureId)
+                        @Html.ValidationMessageFor(model => model.PictureId)
+                    </div>
+                </div>
+                <div class="form-group advanced-setting">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.Published)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(x => x.Published)
+                        @Html.ValidationMessageFor(model => model.Published)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.DisplayOrder)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.DisplayOrder)
+                        @Html.ValidationMessageFor(model => model.DisplayOrder)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@helper TabSeo()
+{
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.NopLabelFor(model => model.MetaKeywords)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.NopEditorFor(x => x.MetaKeywords)
+                            @Html.ValidationMessageFor(model => model.MetaKeywords)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.NopLabelFor(model => model.MetaDescription)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.NopTextAreaFor(x => x.MetaDescription)
+                            @Html.ValidationMessageFor(model => model.MetaDescription)
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.NopLabelFor(model => model.MetaTitle)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.NopEditorFor(x => x.MetaTitle)
+                            @Html.ValidationMessageFor(model => model.MetaTitle)
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}

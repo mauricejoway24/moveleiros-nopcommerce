@@ -1,0 +1,41 @@
+﻿[data-accordion] [data-content] {
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  height: 0px;
+}
+[data-accordion] .content-margin {
+  margin: 15px 20px;
+  display: flex;
+  flex-direction: column;
+}
+[data-accordion] .content-margin [data-fixed] {
+  display: flex;
+  padding-bottom: 7px;
+}
+[data-accordion] .content-margin [data-fixed] .selectable {
+  display: flex;
+  align-items: center;
+}
+[data-accordion] .content-margin [data-fixed] .selectable .check-label {
+  margin-left: 6px;
+}
+[data-accordion] [data-accordion],
+line-height 1 [data-accordion],
+[data-content] [data-accordion] {
+  border: 0;
+  padding: 0;
+}
+[data-accordion] [data-control] {
+  position: relative;
+  padding-right: 40px;
+  padding: 10px 20px;
+}
+[data-accordion].open > [data-control]:after {
+  -webkit-transform: rotate(-180deg);
+  -ms-transform: rotate(-180deg);
+  transform: rotate(-180deg);
+}
+[data-accordion].open [data-content] {
+  height: auto;
+}

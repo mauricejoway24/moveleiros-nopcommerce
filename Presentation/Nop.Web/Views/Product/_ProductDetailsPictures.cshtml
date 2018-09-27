@@ -1,0 +1,95 @@
+﻿@model ProductDetailsModel
+@using Nop.Web.Models.Catalog;
+@{
+    //Html.AddScriptParts("~/Scripts/jquery.magnific-popup.min.js");
+    //Html.AddCssFileParts("~/Content/magnific-popup/magnific-popup.css");
+
+    Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/lightgallery.min.css");
+    Html.AddScriptParts("~/Themes/Moveleiros/Scripts/lightgallery.min.js");
+
+    Html.AddScriptParts("~/Themes/Moveleiros/Scripts/lg-autoplay.min.js");
+    Html.AddScriptParts("~/Themes/Moveleiros/Scripts/lg-fullscreen.min.js");
+    Html.AddScriptParts("~/Themes/Moveleiros/Scripts/lg-thumbnail.min.js");
+    Html.AddScriptParts("~/Themes/Moveleiros/Scripts/lg-zoom.min.js");
+}
+<div class="gallery">
+    <div class="picture" id="main-lightgallery">
+        @if (Model.DefaultPictureZoomEnabled)
+        {
+            <a href="@Model.DefaultPictureModel.FullSizeImageUrl" title="@Model.DefaultPictureModel.Title" id="main-product-img-lightbox-anchor-@Model.Id">
+                <img alt="@Model.DefaultPictureModel.AlternateText" src="@Model.DefaultPictureModel.FullSizeImageUrl" 
+                     title="@Model.DefaultPictureModel.Title" itemprop="image" id="main-product-img-@Model.Id" />
+            </a>
+
+            <div class="next-page-icon"></div>
+            <div class="lg-next lg-icon" lg-event-uid="&amp;88"></div>
+
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    var lastY;
+                    var click = function (e) {
+                        if (e) e.preventDefault();
+
+                        $('#lightgallery-gal .thumb-item').first().trigger('click');
+                    }
+                    var openLightGallery = function (e) {
+                        e.preventDefault();
+
+                        var currentY = e.originalEvent.touches[0].clientY;
+
+                        if (currentY > (lastY + 50) || currentY < (lastY - 50)) return;
+
+                        lastY = currentY;
+
+                        click();
+                    };
+
+                    var touchstart = function (e) {
+                        lastY = e.originalEvent.touches[0].clientY;
+                    }
+
+                    var touchend = function (e) {
+                        var te = e.originalEvent.changedTouches[0].clientY;
+                        if ((lastY > te + 50) || (lastY < te - 50)) {
+                            return;
+                        }
+
+                        click();
+                    }
+
+                    $('#main-product-img-lightbox-anchor-@Model.Id').on('touchstart', touchstart);
+                    $('#main-product-img-lightbox-anchor-@Model.Id').on('touchend', touchend);
+                    $('#main-product-img-lightbox-anchor-@Model.Id').on('click', click);
+                    $('.next-page-icon').on('click', click);
+                });
+            </script>
+        }
+        else
+        {
+            <img alt="@Model.DefaultPictureModel.AlternateText" src="@Model.DefaultPictureModel.ImageUrl" title="@Model.DefaultPictureModel.Title" data-normal itemprop="image" id="main-product-img-@Model.Id" />
+        }
+    </div>
+    @if (Model.PictureModels.Count > 1)
+    {
+        <div id="lightgallery-gal" class="picture-thumbs">
+            @{
+                for (int i = 0; i < Model.PictureModels.Count; i++)
+                {
+                    var picture = Model.PictureModels[i];
+
+                    <div class="thumb-item" href="@picture.FullSizeImageUrl" alt="@picture.AlternateText" title="@picture.Title">
+                        <a href="@picture.FullSizeImageUrl" >
+                            <img src="@picture.ThumbImageUrl" alt="@picture.AlternateText"/>
+                        </a>
+                    </div>
+                }
+            }
+        </div>
+
+        <script type="text/javascript">
+            $(document).ready(function () {
+                lightGallery(document.getElementById('lightgallery-gal'));
+            });
+        </script>
+    }
+</div>

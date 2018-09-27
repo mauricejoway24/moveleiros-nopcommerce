@@ -1,0 +1,17 @@
+﻿.page-title {
+    padding: 6px 0px 0px;
+}
+
+.page-title h1 {
+    float: left;
+    color: #275166;
+}
+
+@media (max-width: 1000px) {
+
+    .page-title {
+        padding: 0;
+        margin-bottom: 0;
+        border: none;
+    }
+}

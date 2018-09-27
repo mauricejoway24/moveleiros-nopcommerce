@@ -1,0 +1,15 @@
+﻿[data-see-all] {
+    margin-top: 5px;
+}
+
+[data-see-all] > a {
+    color: #4a8eb3;
+    border-color: #20a0ff;
+    text-transform: uppercase;
+    font-weight: 600;
+    font-size: 14px;
+}
+
+    [data-see-all] > a:hover {
+        color: #4db3ff;
+    }

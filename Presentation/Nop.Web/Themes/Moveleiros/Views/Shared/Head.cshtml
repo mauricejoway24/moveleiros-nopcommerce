@@ -1,0 +1,161 @@
+﻿@using Nop.Core;
+@using Nop.Core.Infrastructure
+@using Nop.Web.Framework.Themes
+@using Nop.Web.Framework.UI
+
+@functions {
+
+    public void SetCssBase()
+    {
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_general.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_modal.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/font-awesome/css/font-awesome.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/check-box-square/square/blue.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_base-body.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_base-fonts.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_base-fonts-reset.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_header.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_anchor-style.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_base-button.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_breadcrumb.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_accordion-group.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_accordion-data-control.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_filter-base.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_filter-area-input.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_filter-price-input.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_filter-see-all.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_double-inputs.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_product-selectors.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_product-sorting.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_page-title.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_search-results.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_mov-rating-box.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_mov-prices.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_mov-title.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_mov-add-info.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_mov-price-comparison.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_clearfix.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_mov-button-cta.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_mov-area.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_mov-header.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_sidebar-wrapper.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_footer.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_topcartlink.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_banner-cover.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_contact-popup.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_popup.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_gallery.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_menu-mobile.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_search-box-mobile.css");
+
+        /*
+         * New stylus theme
+         */
+
+        // Base wrapper
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/stylus/pages/_shared/flex-reset.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/stylus/pages/_shared/flex-wrapper.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/stylus/pages/_shared/master-flex-wrapper.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/stylus/pages/_shared/vertical-flex-wrapper.css");
+
+        // Left filter panel
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/stylus/pages/search/filter-panel-wrapper.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/stylus/pages/filter/data-accordion.css");
+
+        // Right listing
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/stylus/pages/search/display-panel-wrapper.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/stylus/pages/search/product-list-wrapper.css");
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/stylus/pages/search/product-box-wrapper.css");
+    }
+
+    public void SetJsBase()
+    {
+        // Html.AddScriptParts("~/Themes/Moveleiros/Scripts/accordion.js");
+        Html.AddScriptParts("~/Themes/Moveleiros/Scripts/checkbox.js");
+
+        if (ViewBag.iCheck != null)
+        {
+            Html.AddScriptParts("~/Themes/Moveleiros/Scripts/icheck-boostrap.js");
+        }
+
+        // Html.AddScriptParts("~/Themes/Moveleiros/Scripts/jquery.simpler-sidebar.js");
+
+        Html.AddScriptParts("~/Themes/Moveleiros/Scripts/bootstrap.js");
+
+        //Html.AddScriptParts("~/Themes/Moveleiros/Scripts/popup.js");
+        if (!Context.Request.Url.ToString().Contains("contactus"))
+        {
+            Html.AddScriptParts("~/Themes/Moveleiros/Scripts/filter-bind.js");
+            Html.AddScriptParts("~/Themes/Moveleiros/Scripts/general-async.js");
+            Html.AddScriptParts("~/Themes/Moveleiros/Scripts/chat-controller.js");
+            Html.AddScriptParts("~/Themes/Moveleiros/Scripts/accordion.es5.js");
+            Html.AddScriptParts("~/Themes/Moveleiros/Scripts/filter/filter-request.es5.js");
+            Html.AddScriptParts("~/Themes/Moveleiros/Scripts/sidebar.es5.js");
+            Html.AddScriptParts("~/Themes/Moveleiros/Scripts/sidebar-startup.js");
+            Html.AddScriptParts("~/Themes/Moveleiros/Scripts/location-service.js");
+        }
+        else
+        {
+            // Contacts page
+            Html.AddScriptParts(ResourceLocation.Foot, "~/Themes/Moveleiros/Scripts/contactus-startup.js");
+        }
+    }
+}
+
+@{
+    var supportRtl = EngineContext.Current.Resolve<IWorkContext>().WorkingLanguage.Rtl;
+    var themeName = EngineContext.Current.Resolve<IThemeContext>().WorkingThemeName;
+
+    //add main CSS file
+    if (supportRtl)
+    {
+        SetCssBase();
+        Html.AppendCssFileParts(string.Format("~/Themes/{0}/Content/css/styles.rtl.css", themeName));
+    }
+    else
+    {
+        SetCssBase();
+        Html.AppendCssFileParts(string.Format("~/Themes/{0}/Content/css/styles.css", themeName));
+    }
+
+    if (!Context.Request.Url.ToString().Contains("contactus"))
+    {
+        if (Html.IsDebug())
+        {
+            <script type="text/javascript">
+                var baseChatUrl = 'http://localhost:8080';
+                var defaultStoreId = 2;
+            </script>
+        }
+        else if (Html.IsHomolog())
+        {
+            <script type="text/javascript">
+                var baseChatUrl = 'http://chathomolog.moveleiros.com.br';
+                var defaultStoreId = 1;
+            </script>
+        }
+        else
+        {
+            <script type="text/javascript">
+                //var baseChatUrl = 'https://chat.moveleiros.com.br';
+                var baseChatUrl = 'http://localhost:8080';
+                var defaultStoreId = 7;
+            </script>
+        }
+
+        <script type="text/javascript">
+            (function (w, d, s, u) {
+                w.MoveleirosChat = {}; w.MoveleirosChat.iframeUrl = u;
+                var h = d.getElementsByTagName(s)[0], j = d.createElement(s);
+                j.async = true; //j.src = baseChatUrl + '/external-plugin.js';
+                j.src = 'https://chat.moveleiros.com.br/external-plugin.js';
+                h.parentNode.insertBefore(j, h);
+            })(window, document, 'script', baseChatUrl + '/#/livechat?relogin=true&storeId=' + defaultStoreId);
+        </script>
+    }
+
+    SetJsBase();
+
+    //add jQuery UI css file
+    // Html.AppendCssFileParts("~/Content/jquery-ui-themes/smoothness/jquery-ui-1.10.3.custom.min.css");
+}

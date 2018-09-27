@@ -1,0 +1,44 @@
+﻿@model IEnumerable<LivechatMessagePack>
+
+@{
+    //page title
+    ViewBag.Title = T("Moveleiros.Admin.Livechat.ViewLog").Text;
+    //active menu item (system name)
+    Html.SetActiveMenuItemSystemName("ConversationLog");
+}
+
+<div class="content-header clearfix">
+    <h1 class="pull-left">
+        @T("Moveleiros.Admin.Livechat.ViewLog").Text
+        <small><i class="fa fa-arrow-circle-left"></i>@Html.ActionLink(T("Moveleiros.Admin.Livechat.BackToList").Text, "List")</small>
+    </h1>
+    <div class="clearfix"></div>
+    <h4 class="pull-left">
+        Data do atendimento: @Model.FirstOrDefault().CreatedAt.ToString("dd/MM/yyyy")
+    </h4>
+</div>
+
+<div class="content">
+    <div class="form-horizontal">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                
+                <div class="panel-body">
+                    @foreach (var message in Model)
+                    {
+                        <div class="form-group">
+                            <div class="col-xs-12">
+                                <strong>@message.FromName</strong>
+                                <small> - @message.CreatedAt.ToString("hh:mm:ss")</small>
+                            </div>
+                            <div class="col-md-9">
+                                <p>@message.Message</p>
+                            </div>
+                        </div>
+                    }
+                </div>
+
+            </div>
+        </div>
+    </div>
+</div>

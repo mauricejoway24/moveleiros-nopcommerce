@@ -1,0 +1,15 @@
+﻿body {
+    background: #f3f3f3;
+    min-width: 320px;
+}
+
+.master-wrapper-content {
+    padding-top: 10px;
+}
+
+@media (max-width: 1000px) {
+
+    .side-2 {
+        margin: 0;
+    }
+}

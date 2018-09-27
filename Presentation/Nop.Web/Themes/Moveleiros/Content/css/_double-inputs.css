@@ -1,0 +1,15 @@
+﻿.double-inputs {
+    position: relative;
+    margin: 0;
+    text-align: center;
+    white-space: nowrap; /*fix for 'required' elements*/
+    font-size: 0;
+}
+
+    .double-inputs:after {
+        content: "";
+        display: block;
+        clear: both;
+    }
+
+    

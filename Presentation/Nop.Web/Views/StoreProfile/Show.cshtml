@@ -1,0 +1,121 @@
+﻿@model Nop.Core.Domain.Stores.Store
+@{
+    Layout = "~/Views/Shared/_ColumnsOne.cshtml";
+
+    //title
+    Html.AddTitleParts(string.Format(T("PageTitle.StoreProfile").Text, Model.CompanyName));
+
+    Html.AppendCssFileParts("~/Themes/Moveleiros/Content/stylus/pages/store-profile/base.css");
+
+    var address = string.Format("{0} - {1} - {2}", Model.CompanyAddress, Model.CompanyNeighborhood, Model.CompanyCity);
+}
+
+<div class="page store-profile">
+    <section class="page-title">
+        <h1>@Model.CompanyName</h1>
+        <address>@address</address>
+    </section>
+
+    <section class="page-body margin-top-mobile">
+        <div class="content">
+            <section class="about">
+                <h3>Sobre a loja</h3>
+                <p>
+                    @if (string.IsNullOrEmpty(Model.About))
+                    {
+                        @T("Moveleiros.SemSobre").Text
+                    }
+                    else
+                    {
+                        @Model.About
+                    }
+                </p>
+            </section>
+        </div>
+        <aside>
+            <div class="mov-button-cta">
+                <h3>@T("Moveleiros.About.CtaTitle").Text</h3>
+                @{
+                    var projectCustomization = T("Moveleiros.ShoppingCart.ProjectCustomization").Text;
+                    var customizationButtonColor = T("Moveleiros.ShoppingCart.ProjectCustomization").Text;
+
+                    <input type="button" value="@(projectCustomization)"
+                           class="button-2 product-box-add-to-cart-button mov-cta-customization"
+                           onclick="MovScripts.openProfileChat(@Model.Id, '@Model.Name')" />
+                }
+            </div>
+            <section class="customer-not-satisfied">
+                <h3>@T("Moveleiros.Prodile.CustomerNotSatisfied").Text</h3>
+                @Html.ActionLink(T("Moveleiros.Profile.LookOtherProducts").Text, "Index", "Home", null, new { @class = "btn btn-white btn-block" })
+            </section>
+        </aside>
+    </section>
+
+    <section id="location">
+        <a href="https://maps.google.com/?q=@address" target="_blank">
+            <h3>Onde estamos</h3>
+            <address>@address</address>
+        </a>
+        <div id="map">
+            Carregando mapa...
+        </div>
+    </section>
+
+    <section class="related-products">
+        @Html.Action("RelatedProducts", "Product", new { productId = 1 })
+    </section>
+</div>
+
+<script>
+    function initMap() {
+
+        geocoder = new google.maps.Geocoder();
+
+        var lat = new google.maps.LatLng(-23.5505199, -46.63330939999999);
+
+        var map = new google.maps.Map(document.getElementById('map'), {
+            center: lat,
+            scrollwheel: false,
+            zoom: 15
+        });
+
+        init();
+
+        function init() {
+
+            if (geocoder) {
+
+                geocoder.geocode({
+                    address: "@address"
+                }, renderMap)
+            }
+        }
+
+        function renderMap(result, status) {
+
+            if (status != google.maps.GeocoderStatus.OK) {
+                mapError(result);
+                return;
+            }
+
+            if (status == google.maps.GeocoderStatus.ZERO_RESULTS) {
+                mapError(result);
+                return;
+            }
+
+            map.setCenter(result[0].geometry.location);
+
+            var marker = new google.maps.Marker({
+                map: map,
+                position: result[0].geometry.location,
+                title: '@Model.CompanyName'
+            });
+        }
+
+        function mapError(status) {
+            document.getElementById('map').innerHTML = 'Clique aqui para ver o mapa';
+            console.log('s:', status);
+        }
+    }
+</script>
+<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCug9WuvNNXWqDcS1dPJWb6g_w7b274OLw&callback=initMap" async defer></script>

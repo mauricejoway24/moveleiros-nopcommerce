@@ -1,0 +1,9 @@
+Group: Comelite
+FriendlyName: Universal Chat
+SystemName: Comelite.UniversalConnector
+Version: 2.00
+SupportedVersions: 3.90
+Author: www.comelite.net
+DisplayOrder: 1
+FileName: Nop.Plugin.Comelite.UniversalConnector.dll
+Description: 

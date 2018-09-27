@@ -1,0 +1,24 @@
+﻿.breadcrumb {
+    margin: 0;
+    background: none;
+    padding: 0px 10px 10px;
+}
+
+@media (max-width: 1000px) {
+
+    .breadcrumb {
+        padding: 0 0 10px;
+    }
+
+    .breadcrumb * {
+        margin: 0 !important;
+    }
+
+        .breadcrumb span {
+            padding-right: 4px;
+        }
+
+        .breadcrumb .delimiter {
+            padding-right: 7px;
+        }
+}

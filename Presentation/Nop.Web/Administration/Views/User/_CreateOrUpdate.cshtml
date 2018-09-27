@@ -1,0 +1,152 @@
+﻿@model UserModel
+
+@Html.ValidationSummary(false)
+@Html.HiddenFor(model => model.Id)
+
+<script>
+    $(document).ready(function() {
+        bindBootstrapTabSelectEvent('customer-edit');
+    });
+</script>
+
+<div class="content">
+    <div class="form-horizontal">
+        <div id="customer-edit" class="nav-tabs-custom">
+            <ul class="nav nav-tabs">
+                @Html.RenderBootstrapTabHeader("tab-info", @T("Moveleiros.Admin.Settings.Users.Info"), true)
+            </ul>
+            <div class="tab-content">
+                @Html.RenderBootstrapTabContent("tab-info", @TabInfo(), true)
+            </div>
+        </div>
+    </div>
+</div>
+
+@{
+    //custom tabs
+    var eventMessage = new AdminTabStripCreated(this.Html, "customer-edit");
+    EngineContext.Current.Resolve<IEventPublisher>().Publish(eventMessage);
+    foreach (var eventBlock in eventMessage.BlocksToRender)
+    {
+        @eventBlock
+    }
+}
+
+@*save selected tab name*@
+<input type="hidden" id="selected-tab-name" name="selected-tab-name" value="@(Html.GetSelectedTabName())">
+
+@helper TabInfo()
+{
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-body">
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.Email)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.Email)
+                        @Html.ValidationMessageFor(model => model.Email)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.Password)
+                    </div>
+                    <div class="col-md-9">
+                        <div class="input-group">
+                            @Html.NopEditorFor(model => model.Password)
+                            <div class="input-group-btn">
+                                @if (Model.Id > 0)
+                                {
+                                    <button type="submit" name="changepassword" class="btn btn-info">
+                                        @T("Admin.Customers.Customers.Fields.Password.Change")
+                                    </button>
+                                }
+                            </div>
+                        </div>
+                        @Html.ValidationMessageFor(model => model.Password)
+                    </div>
+                </div>
+           
+            <div class="form-group">
+                <div class="col-md-3">
+                    @Html.NopLabelFor(model => model.SelectedCustomerRoleIds)
+                </div>
+                <div class="col-md-9">
+                    <div class="input-group input-group-required">
+                        @Html.EditorFor(model => model.SelectedCustomerRoleIds, new { SelectList = Model.AvailableCustomerRoles })
+                        <div class="input-group-btn">
+                            @Html.RequiredHint()
+                        </div>
+                    </div>
+                    <script>
+                        $(document).ready(function() {
+                            var customerRolesIdsInput = $('#@Html.FieldIdFor(model => model.SelectedCustomerRoleIds)').data("kendoMultiSelect");
+                            customerRolesIdsInput.setOptions({
+                                customerRolesIdsInput: false
+                            });
+
+                            @if (Model.AvailableCustomerRoles.Count == 0)
+                            {
+                                <text>
+                                    customerRolesIdsInput.setOptions({
+                                        enable: false,
+                                        placeholder: '@T("Admin.Customers.Customers.Fields.CustomerRoles.NoRoles")'
+                                    });
+                                    customerRolesIdsInput._placeholder();
+                                    customerRolesIdsInput._enable();
+                                </text>
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.FirstName)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.FirstName)
+                        @Html.ValidationMessageFor(model => model.FirstName)
+                    </div>
+                </div>
+          
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.LastName)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.LastName)
+                        @Html.ValidationMessageFor(model => model.LastName)
+                    </div>
+                </div>
+  
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.Active)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.Active)
+                        @Html.ValidationMessageFor(model => model.Active)
+                    </div>
+                </div>
+             
+                @if (Model.Id > 0)
+                {
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.NopLabelFor(model => model.CreatedOn)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.NopDisplayFor(model => model.CreatedOn)
+                        </div>
+                    </div>
+                }
+               
+            </div>
+        </div>
+    </div>
+}

@@ -1,0 +1,25 @@
+﻿[data-accordion-group] {
+    background: #fff;
+    box-shadow: 0 1px 3px 1px rgba(0,0,0,.12);
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+    -webkit-touch-callout: none; /* iOS Safari */
+    -webkit-user-select: none; /* Safari */
+    -khtml-user-select: none; /* Konqueror HTML */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none; /* Internet Explorer/Edge */
+    user-select: none; /* Non-prefixed version, currently
+                                  supported by Chrome and Opera */
+}
+
+@media (max-width: 1000px) {
+
+    [data-accordion-group] {
+        display: none;
+    }
+
+    .sidebar [data-accordion-group] {
+        display: block;
+    }
+}

@@ -1,0 +1,58 @@
+﻿[
+  {
+    "outputFile": "Themes/Moveleiros/Content/stylus/pages/_shared/flex-wrapper.css",
+    "inputFile": "Themes/Moveleiros/Content/stylus/pages/_shared/flex-wrapper.styl"
+  },
+  {
+    "outputFile": "Themes/Moveleiros/Content/stylus/pages/search/filter-panel-wrapper.css",
+    "inputFile": "Themes/Moveleiros/Content/stylus/pages/search/filter-panel-wrapper.styl"
+  },
+  {
+    "outputFile": "Themes/Moveleiros/Content/stylus/pages/search/display-panel-wrapper.css",
+    "inputFile": "Themes/Moveleiros/Content/stylus/pages/search/display-panel-wrapper.styl"
+  },
+  {
+    "outputFile": "Themes/Moveleiros/Content/stylus/pages/_shared/master-flex-wrapper.css",
+    "inputFile": "Themes/Moveleiros/Content/stylus/pages/_shared/master-flex-wrapper.styl"
+  },
+  {
+    "outputFile": "Themes/Moveleiros/Content/stylus/pages/_shared/vertical-flex-wrapper.css",
+    "inputFile": "Themes/Moveleiros/Content/stylus/pages/_shared/vertical-flex-wrapper.styl"
+  },
+  {
+    "outputFile": "Themes/Moveleiros/Content/stylus/pages/search/product-list-wrapper.css",
+    "inputFile": "Themes/Moveleiros/Content/stylus/pages/search/product-list-wrapper.styl"
+  },
+  {
+    "outputFile": "Themes/Moveleiros/Content/stylus/pages/search/product-box-wrapper.css",
+    "inputFile": "Themes/Moveleiros/Content/stylus/pages/search/product-box-wrapper.styl"
+  },
+  {
+    "outputFile": "Themes/Moveleiros/Content/stylus/pages/_shared/flex-reset.css",
+    "inputFile": "Themes/Moveleiros/Content/stylus/pages/_shared/flex-reset.styl"
+  },
+  {
+    "outputFile": "Themes/Moveleiros/Content/stylus/pages/filter/data-accordion.css",
+    "inputFile": "Themes/Moveleiros/Content/stylus/pages/filter/data-accordion.styl"
+  },
+  {
+    "outputFile": "Themes/Moveleiros/Scripts/accordion.es5.js",
+    "inputFile": "Themes/Moveleiros/Scripts/accordion.js"
+  },
+  {
+    "outputFile": "Themes/Moveleiros/Scripts/filter/filter-request.es5.js",
+    "inputFile": "Themes/Moveleiros/Scripts/filter/filter-request.js"
+  },
+  {
+    "outputFile": "Themes/Moveleiros/Scripts/sidebar.es5.js",
+    "inputFile": "Themes/Moveleiros/Scripts/sidebar.js"
+  },
+  {
+    "outputFile": "Themes/Moveleiros/Content/stylus/pages/store-profile/base.css",
+    "inputFile": "Themes/Moveleiros/Content/stylus/pages/store-profile/base.styl"
+  },
+  {
+    "outputFile": "Themes/Moveleiros/Scripts/photo-slider.es5.js",
+    "inputFile": "Themes/Moveleiros/Scripts/photo-slider.js"
+  }
+]

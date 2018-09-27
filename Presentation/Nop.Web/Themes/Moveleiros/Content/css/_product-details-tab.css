@@ -1,0 +1,124 @@
+﻿.product-details-tab h1 {
+    padding: 50px 0;
+    font-weight: 400;
+    text-align: center;
+}
+
+.product-details-tab p {
+    margin: 0 0 20px;
+    line-height: 1.5;
+}
+
+.product-details-tab main {
+    min-width: 320px;
+    max-width: 800px;
+    padding: 50px;
+    margin: 0 auto;
+    background: #fff;
+}
+
+.product-details-tab section {
+    display: none;
+    padding: 0 20px;
+}
+
+.product-details-tab input {
+    display: none;
+}
+
+.product-details-tab label {
+    display: inline-block;
+    margin: 0 0 -1px;
+    padding: 0px 19px;
+    font-weight: 400;
+    text-align: center;
+    color: #bbb;
+    font-size: 1.4rem;
+    text-transform: uppercase;
+}
+
+    .product-details-tab label:before {
+        font-family: fontawesome;
+        font-weight: normal;
+        margin-right: 10px;
+    }
+
+    .product-details-tab label:hover {
+        color: #888;
+        cursor: pointer;
+    }
+
+.product-details-tab input:checked + label {
+    color: #fff;
+    border: 1px solid #ddd;
+    background: #4a8eb3;
+}
+
+.product-details-tab #tab1:checked ~ #content1,
+.product-details-tab #tab2:checked ~ #content2,
+.product-details-tab #tab3:checked ~ #content3,
+.product-details-tab #tab4:checked ~ #content4 {
+    display: flex;
+}
+
+.product-details-tab #content2 img {
+    width: 100%;
+}
+
+@media screen and (max-width: 650px) {
+
+        .product-details-tab label:before {
+            margin: 0;
+            font-size: 18px;
+        }
+}
+
+@media screen and (max-width: 400px) {
+    .product-details-tab label {
+        padding: 10px;
+        font-size: 15px;
+    }
+}
+
+.product-details-tab {
+    padding: 10px;
+}
+
+    .product-details-tab .project-contains,
+    .product-details-tab .project-dimension {
+        white-space: pre-line;
+    }
+
+    .product-details-tab .aside-observation {
+        width: 65%;
+        padding: 0 20px 20px;
+        background: #f8f8f8;
+        margin-left: 40px;
+        align-self: flex-start;
+    }
+
+@media (max-width: 1000px) {
+
+    .product-details-tab {
+        text-align: left;
+        padding: 0;
+    }
+
+        .product-details-tab #tab1:checked ~ #content1,
+        .product-details-tab #tab2:checked ~ #content2,
+        .product-details-tab #tab3:checked ~ #content3,
+        .product-details-tab #tab4:checked ~ #content4 {
+            display: flex;
+            -ms-flex-direction: column;
+            -webkit-flex-direction: column;
+            flex-direction: column;
+        }
+
+        .product-details-tab .aside-observation {
+            width: 100%;
+            padding: 0 20px 20px;
+            background: #f8f8f8;
+            margin-left: 0;
+            margin-top: 40px;
+        }
+}

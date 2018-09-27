@@ -1,0 +1,26 @@
+﻿body {
+    font-family: Titilium, Arial, Helvetica, sans-serif;
+    font-size: 16px;
+}
+
+input, textarea, select,
+.profile-info-box,
+.latest-posts {
+    font-size: 15px;
+    font-family: Titilium, Arial, Helvetica, sans-serif;
+}
+
+    input[type=password] {
+        padding-top: 6px;
+    }
+
+.clear-fix {
+    clear: both !important;
+    display: block !important;
+    font-size: 0 !important;
+    line-height: 0 !important;
+    border: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    list-style: none !important;
+}

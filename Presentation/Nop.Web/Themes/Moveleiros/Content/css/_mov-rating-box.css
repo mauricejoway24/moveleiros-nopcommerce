@@ -1,0 +1,9 @@
+﻿.mov-rating-box {
+    margin: 0 !important;
+    width: 100%;
+}
+
+    .mov-rating-box .mov-rating {
+        color: #bcbcbc;
+        font-size: 1rem;
+    }

@@ -1,0 +1,160 @@
+﻿@model ChatContactUsModel
+
+@using Nop.Web.Models.Chat;
+
+@{
+    Layout = "";
+}
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>@T("PageTitle.ContactUs").Text</title>
+    
+    @{ 
+        Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/styles.css");
+    }
+
+    @Html.NopCssFiles(this.Url, ResourceLocation.Head)
+
+    <style>
+        .page-title {
+            min-height: 41px;
+            display: flex;
+        } 
+        
+        .page-title h1 {
+            font-size: 22px;
+            text-align: left;
+            width: 100%;
+        }
+
+        .inputs label {
+            text-align: left;
+        }
+
+        .message-error, 
+        .field-validation-error, 
+        .username-not-available-status, 
+        .poll-vote-error, 
+        .password-error {
+            text-align: left;
+        }
+
+        .close-button {
+            background-color: #808080 !important;
+            min-width: 0 !important;
+            padding: 5px 5px !important;
+            align-self: center;
+        }
+
+            .close-button:hover {
+                background-color: #919191 !important;
+            }
+
+        .fieldset, .section {
+            position: relative;
+            margin: 0 0 10px;
+        }
+
+        .contact-page .result, .contact-page .message-error, .email-a-friend-page .result, .email-a-friend-page .message-error, .apply-vendor-page .result, .apply-vendor-page .message-error {
+            margin: 20px 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="page contact-page">
+
+        <div class="page-title">
+            <h1>@T("Moveleiros.PageTitle.CustomizationForm")</h1>
+            <button id="close-button" type="button" class="button-1 close-button">X</button>
+        </div>
+
+        <div class="page-body">
+
+            @if (Model.SuccessfullySent)
+            {
+                <div class="result">
+                    @Model.Result
+                </div>
+            }
+            else
+            {
+                using (Html.BeginForm())
+                {
+                    @Html.AntiForgeryToken()
+                    var validationSummary = Html.ValidationSummary(true);
+                    if (!MvcHtmlString.IsNullOrEmpty(validationSummary))
+                    {
+                        <div class="message-error">@validationSummary</div>
+                    }
+
+                    @Html.HiddenFor(model => model.Subject)
+
+                    <div class="fieldset">
+                        <div class="form-fields">
+                            <div class="inputs">
+                                @Html.LabelFor(model => model.FullName)
+                                @Html.TextBoxFor(model => model.FullName, new { @class = "fullname", placeholder = T("ContactUs.FullName.Hint") })
+                                @Html.RequiredHint()
+                                @Html.ValidationMessageFor(model => model.FullName)
+                            </div>
+
+                            <div class="inputs">
+                                @Html.LabelFor(model => model.Email)
+                                @Html.TextBoxFor(model => model.Email, new { @class = "email", placeholder = T("ContactUs.Email.Hint") })
+                                @Html.RequiredHint()
+                                @Html.ValidationMessageFor(model => model.Email)
+                            </div>
+
+                            <div class="inputs">
+                                @Html.LabelFor(model => model.PhoneNumber)
+                                @Html.TextBoxFor(model => model.PhoneNumber, new { @class = "number", placeholder = T("Moveleiros.ContactUs.PhoneNumber.Hint") })
+                                @Html.RequiredHint()
+                                @Html.ValidationMessageFor(model => model.PhoneNumber)
+                            </div>
+
+
+                            <div class="inputs">
+                                @Html.LabelFor(model => model.Question)
+                                @Html.TextAreaFor(model => model.Question, new { @class = "enquiry", placeholder = T("Moveleiros.ContactUs.Enquiry.Hint") })
+                                @Html.ValidationMessageFor(model => model.Question)
+                            </div>
+
+                            @if (Model.DisplayCaptcha)
+                            {
+                                <div class="captcha-box">
+                                    @Html.Raw(Html.GenerateCaptcha())
+                                </div>
+                            }
+                        </div>
+                    </div>
+
+                    <div class="buttons">
+                        <input type="submit" name="send-email" class="button-1 contact-us-button" value="@T("ContactUs.Button")" />
+                    </div>
+                }
+            }
+
+        </div>
+    </div>
+
+    <script>
+        var w = window;
+
+        w.addEventListener('load', function () {
+
+            // faking jivo
+            w.parent.onLoadCallback();
+
+            document.getElementById('close-button').addEventListener('click', function (e) {
+
+                e.preventDefault();
+
+                w.parent.onChatRemoved();
+            });
+        });
+    </script>
+</body>
+</html>
+
+

@@ -1,0 +1,43 @@
+﻿.mov-price-comparison {
+    padding-left: 10px;
+    padding-right: 10px;
+    font-size: 1.1rem;
+    line-height: 1.3rem;
+    align-items: center;
+}
+
+.mov-price-comparison .best-price-title {
+    font-weight: 600;
+}
+
+.mov-price-comparison .best-price-comparison-title {
+}
+
+.mov-price-comparison .best-price {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #22b14c;
+    line-height: 2rem;
+}
+
+.mov-price-comparison .best-price-comparison {
+    text-decoration: line-through;
+    color: #22b14c;
+    line-height: 2rem;
+}
+
+@media (min-width: 769px) {
+
+    .product-list .mov-price-comparison {
+        width: 25%;
+        border-right: 2px solid #f3f3f3;
+        float: left;
+        padding-left: 10px;
+        padding-right: 10px;
+        font-size: 1.05rem;
+        line-height: 1.3rem;
+        align-items: center;
+        display: flex;
+        flex-flow: row wrap;
+    }
+}

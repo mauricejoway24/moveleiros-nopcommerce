@@ -1,0 +1,9 @@
+﻿#topcartlink a {
+    background: none;
+    padding: 0;
+}
+
+#topcartlink .fa {
+    font-size: 1rem;
+    margin-right: 4px;
+}

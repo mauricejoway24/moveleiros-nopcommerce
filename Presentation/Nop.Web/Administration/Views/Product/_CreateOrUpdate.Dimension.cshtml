@@ -1,0 +1,56 @@
+﻿@model ProductModel
+
+@using Nop.Core.Domain.Catalog;
+@using Nop.Services
+@using Nop.Services.Stores
+
+@{
+    var stores = EngineContext.Current.Resolve<IStoreService>().GetAllStores();
+
+    //resources for product tags input
+    Html.AppendCssFileParts("~/Administration/Content/tagEditor/jquery.tag-editor.css");
+    Html.AppendScriptParts("~/Administration/Scripts/tagEditor/jquery.tag-editor.min.js");
+    Html.AppendScriptParts("~/Administration/Scripts/tagEditor/jquery.caret.min.js");
+}
+
+<div class="raw clearfix">
+
+    <div class="col-md-12">
+        <div class="panel-group">
+
+            <div class="panel panel-default">
+
+                <div class="panel-heading">
+                    @T("Moveleiros.Admin.Catalog.Products.DimensionInfo")
+                </div>
+
+                <div class="panel-body">
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.NopLabelFor(model => model.DimensionImageId)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.EditorFor(model => model.DimensionImageId, "DimensionPicture")
+                            @Html.ValidationMessageFor(model => model.DimensionImageId)
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.NopLabelFor(model => model.DimensionDescription)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.NopTextAreaFor(model => model.DimensionDescription)
+                            @Html.ValidationMessageFor(model => model.DimensionDescription)
+                        </div>
+                    </div>
+ 
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+</div>

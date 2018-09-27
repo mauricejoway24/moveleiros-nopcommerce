@@ -1,0 +1,62 @@
+﻿.mov-button-cta {
+    padding-left: 10px;
+}
+
+    .mov-button-cta input {
+        width: 100% !important;
+        /*height: 50px !important;*/
+        min-width: 100% !important;
+        -moz-border-radius: 4px;
+        -webkit-border-radius: 4px;
+        border-radius: 4px;
+        box-shadow: 0 2px 4px 0 rgba(0,0,0,.32), 0 0 6px 0 rgba(0,0,0,.14);
+    }
+
+        .mov-button-cta input:hover {
+            box-shadow: 2px 4px 4px 0px rgba(0,0,0,.22), 0 0 6px 0 rgba(0,0,0,.14);
+        }
+
+.mov-button-cta input.mov-cta-customization {
+    background: #22b14c;
+}
+
+        .mov-button-cta input.mov-cta-customization:hover {
+            background: #11a03b;
+        }
+
+@media (min-width: 769px) {
+
+    .product-list .mov-button-cta {
+        float: left;
+        width: 22%;
+        padding-left: 10px;
+        align-items: center;
+        display: flex;
+        flex-flow: row wrap;
+    }
+
+    .product-grid .mov-button-cta input {
+        width: 100%;
+    }
+
+}
+
+.product-grid .mov-button-cta input {
+    margin-top: 10px;
+}
+
+.product-grid .item-box .details,
+.product-grid .item-box .mov-price-comparison,
+.product-grid .item-box .mov-button-cta {
+    padding: 0;
+}
+
+.product-grid .item-box .mov-price-comparison {
+    margin-top: 10px;
+}
+
+.product-grid .item-box .details .add-info input {
+    -moz-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    border-radius: 4px;
+}

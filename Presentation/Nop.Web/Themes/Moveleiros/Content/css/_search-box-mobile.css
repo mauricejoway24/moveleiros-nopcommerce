@@ -1,0 +1,18 @@
+﻿@media (max-width: 1000px) {
+
+    .header-lower-mobile .search-box {
+        padding: 7px 0 0 !important;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+        .header-lower-mobile .search-box form {
+            display: flex;
+            width: 100%;
+        }
+
+        .header-lower-mobile .search-box input[type=text] {
+            width: 100%;
+        }
+}

@@ -1,0 +1,10 @@
+﻿.product-list-wrapper {
+  flex: 1;
+  flex-direction: row;
+  flex-flow: row wrap;
+}
+@media screen and (min-width: 769px) {
+  .product-list .product-list-wrapper {
+    flex-direction: column;
+  }
+}

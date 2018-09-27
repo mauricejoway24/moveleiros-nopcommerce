@@ -1,0 +1,25 @@
+﻿.product-details-page {
+    padding: 0;
+    color: #555;
+}
+
+.product-details-page h1 {
+    color: #555;
+}
+
+.product-details-top {
+    display: flex;
+}
+
+.gallery {
+    margin: 0 15px 0 0;
+}
+
+@media (max-width: 1000px) {
+
+    .product-details-top {
+        -ms-flex-direction: column;
+        -webkit-flex-direction: column;
+        flex-direction: column;
+    }
+}

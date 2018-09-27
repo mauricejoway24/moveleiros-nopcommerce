@@ -1,0 +1,81 @@
+﻿@using Nop.Web.Models.Catalog;
+@model SearchModel
+
+<div class="page-body">
+
+    @Html.Widget("productsearch_page_before_results")
+
+    <div class="search-results">
+        @if (!String.IsNullOrEmpty(Model.Warning))
+        {
+            <div class="warning">
+                @Model.Warning
+            </div>
+        }
+        @if (Model.NoResults)
+        {
+            <div class="no-result">
+                @T("Moveleiros.Search.NoResultsText")
+            </div>
+        }
+
+        @if (Model.Products.Count > 0)
+        {
+            <div class="@(Model.PagingFilteringContext.ViewMode == "list" ? "product-list" : "product-grid")">
+                <div class="item-grid flex-wrapper product-list-wrapper">
+                    @foreach (var product in Model.Products)
+                    {
+                        <div class="item-box product-box-wrapper">
+                            @Html.Partial("_ProductBox", product)
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        @{
+            var pager = Html.Pager(Model.PagingFilteringContext)
+                .QueryParam("pagenumber")
+                .BooleanParameterName("adv")
+                .BooleanParameterName("isc")
+                .BooleanParameterName("sid")
+                .RenderEmptyParameters(true);
+        }
+        @if (!pager.IsEmpty())
+        {
+            <div class="pager">
+                @pager
+            </div>
+        }
+    </div>
+    @Html.Widget("productsearch_page_after_results")
+
+    @{
+        var uniqueReference = DateTime.Now.Millisecond * new Random().Next(10, 999);
+    }
+
+    @if (Model.ajax && Model.SelectedCategories.Any(t => t.Selected))
+    {
+        <div name="subcategory" class="accordion open" data-accordion style="display: none;">
+            <div data-control>@T("Moveleiros.Search.SubCategory")</div>
+            <div data-content data-filter="selcats" data-filter-type="checkbox">
+                <div class="content-margin">
+                    @foreach (var category in Model.SelectedSubCategories)
+                    {
+                        var ix = Model.SelectedSubCategories.IndexOf(category);
+
+                        <div data-fixed>
+                            <label class="selectable">
+                                <input id="selcats_@Model.SelectedCategories[ix].Id" type="checkbox" value="@Model.SelectedSubCategories[ix].Id"
+                                       name="selcats" data-label="@category.Name" @(category.Selected ? "checked" : "") />
+                                <span class="check-label">@category.Name</span>
+                            </label>
+                        </div>
+                    }
+                    <div data-see-all="@Url.Action("FilterSubCategories", "Catalog")" data-see-all-title="@T("Moveleiros.SelectSubCategories")">
+                        <a>Ver todas as categorias</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>

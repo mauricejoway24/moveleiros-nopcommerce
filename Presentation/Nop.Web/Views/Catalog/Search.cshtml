@@ -1,0 +1,57 @@
+﻿@model SearchModel
+
+@{
+    if (Model.ajax)
+    {
+        Layout = null;
+    }
+    else
+    {
+        Layout = "~/Views/Shared/_ColumnsTwo.cshtml";
+    }
+
+    //title
+    Html.AddTitleParts(T("PageTitle.Search").Text);
+    //page class
+    Html.AppendPageCssClassParts("html-search-page");
+    Html.AddCanonicalUrlParts("https://www.moveleiros.com.br/");
+    Html.AddCssFileParts("~/Themes/Moveleiros/Content/css/_popup.css");
+    Html.AddScriptParts("~/Themes/Moveleiros/Scripts/popup.js");
+}
+
+@using Nop.Web.Models.Catalog;
+
+@section left {
+    @Html.Partial("_LeftFilterPanel", Model)
+}
+
+@section h1_title {
+    <div class="page-title">
+        <h1>@T("Search")</h1>
+
+        @Html.Partial("_CatalogSelectors", Model.PagingFilteringContext, new ViewDataDictionary())
+    </div>
+}
+
+@if (Model.ajax)
+{
+    @Html.Partial("_Search", Model)
+}
+else
+{
+    <style>
+        input.mov-cta-customization {
+            background: @(ViewBag.CtaCustomizationColor) !important;
+        }
+
+        input.mov-cta-customization:hover {
+            background: @(ViewBag.CtaCustomizationColorHover) !important;
+        }
+    </style>
+
+    <div class="page search-page">
+        @Html.Partial("_Search", Model)
+    </div>
+}
+
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCug9WuvNNXWqDcS1dPJWb6g_w7b274OLw&callback=initReferenceMap" async defer></script>

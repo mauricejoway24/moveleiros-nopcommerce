@@ -1,0 +1,113 @@
+﻿@model ProductOverviewModel
+@using Nop.Core
+@using Nop.Core.Domain.Catalog
+@using Nop.Core.Domain.Orders
+@using Nop.Core.Domain.Tax
+@using Nop.Core.Infrastructure
+@using Nop.Web.Models.Catalog;
+@using System.Web.Script.Serialization;
+
+@{
+    //prepare "Add to cart" AJAX link
+    string addtocartlink = "";
+    var shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart;
+    var quantity = 1;
+    if (Model.ProductPrice.ForceRedirectionAfterAddingToCart)
+    {
+        addtocartlink = Url.RouteUrl("AddProductToCart-Catalog", new { productId = Model.Id, shoppingCartTypeId = shoppingCartTypeId, quantity = quantity, forceredirection = Model.ProductPrice.ForceRedirectionAfterAddingToCart });
+    }
+    else
+    {
+        addtocartlink = Url.RouteUrl("AddProductToCart-Catalog", new { productId = Model.Id, shoppingCartTypeId = shoppingCartTypeId, quantity = quantity });
+    }
+
+    var addtowishlistlink = Url.RouteUrl("AddProductToCart-Catalog", new { productId = Model.Id, shoppingCartTypeId = (int)ShoppingCartType.Wishlist, quantity = quantity });
+    var addtocomparelink = Url.RouteUrl("AddProductToCompare", new { productId = Model.Id });
+}
+
+<div class="product-item flex-reset" data-productid="@Model.Id">
+    <div class="picture">
+        <a href="@Url.RouteUrl("Product", new { SeName = Model.SeName })" title="@Model.DefaultPictureModel.Title">
+            <img alt="@Model.DefaultPictureModel.AlternateText" src="@Model.DefaultPictureModel.ImageUrl" title="@Model.DefaultPictureModel.Title" />
+        </a>
+    </div>
+
+    <div class="details">
+
+        <h2 class="product-title mov-title">
+            <a href="@Url.RouteUrl("Product", new { SeName = Model.SeName })">@Model.Name</a>
+        </h2>
+
+        @if (EngineContext.Current.Resolve<CatalogSettings>().ShowSkuOnCatalogPages && !string.IsNullOrEmpty(Model.Sku))
+        {
+            <div class="sku">
+                @Model.Sku
+            </div>
+        }
+
+        <div class="mov-area mov-add-info">
+            <p>
+                @T("Moveleiros.Products.EnvironmentSize").Text @(Model.Area)m²
+            </p>
+            <p>
+                @T("Moveleiros.Products.SellBy").Text @Model.StoreName
+            </p>
+        </div>
+
+        @if (Model.ReviewOverviewModel.AllowCustomerReviews)
+        {
+            int ratingPercent = 0;
+
+            if (Model.ReviewOverviewModel.TotalReviews != 0)
+            {
+                ratingPercent = ((Model.ReviewOverviewModel.RatingSum * 100) / Model.ReviewOverviewModel.TotalReviews) / 5;
+            }
+
+            <div class="product-rating-box mov-rating-box" title="@string.Format(T("Reviews.TotalReviews").Text, Model.ReviewOverviewModel.TotalReviews)">
+
+                <div class="mov-rating">
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                    <i class="fa fa-star" aria-hidden="true"></i>
+                </div>
+            </div>
+        }
+    </div>
+
+    <div class="mov-price-comparison">
+        <div>
+            <div class="best-price-comparison-title">
+                @T("Moveleiros.ProductLayout.FromPrice").Text
+            </div>
+            <div class="best-price-comparison">
+                @Model.ProductPrice.OldPrice
+            </div>
+        </div>
+        <div>
+            <div class="best-price-title">
+                @T("Moveleiros.ProductLayout.ToPrice").Text
+            </div>
+            <div class="best-price">
+                @Model.ProductPrice.Price
+            </div>
+        </div>
+    </div>
+
+    <div class="mov-button-cta">
+        <div class="cta-title">
+            <p>@string.Format(T("Moveleiros.Search.CtaTitle").Text, Model.StoreName)</p>
+            <p class="address">@Model.StoreShortAddress</p>
+        </div>
+        @{
+                var projectCustomization = T("Moveleiros.ShoppingCart.ProjectCustomization").Text;
+                var customizationButtonColor = T("Moveleiros.ShoppingCart.ProjectCustomization").Text;
+                var extraValue = new JavaScriptSerializer().Serialize(Model);
+                <input type="button" value="@(projectCustomization)"
+                   class="button-2 product-box-add-to-cart-button mov-cta-customization"
+                   onclick="MovScripts.openChat(@Model.ProductInStoreId, @Model.Id, '@Model.Name', null, null, null, @(extraValue))" />
+        }
+    </div>
+
+</div>

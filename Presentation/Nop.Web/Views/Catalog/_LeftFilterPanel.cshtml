@@ -1,0 +1,25 @@
+﻿@model Nop.Web.Models.Catalog.SearchModel
+
+@using (Html.BeginRouteForm("ProductSearch", FormMethod.Get))
+{
+    <div class="filter">
+        @Html.Partial("_FilterContent", Model)
+    </div>
+}
+
+@using (Html.BeginRouteForm("ProductSearch", FormMethod.Get))
+{
+<div id="sidebar-filter" class="sidebar sidebar-left">
+
+    <div id="sidebar-wrapper" class="sidebar-wrapper">
+
+        @Html.Partial("_FilterContent", Model)
+    </div>
+</div>
+}
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#sidebar-filter").prependTo("body");
+    });
+</script>

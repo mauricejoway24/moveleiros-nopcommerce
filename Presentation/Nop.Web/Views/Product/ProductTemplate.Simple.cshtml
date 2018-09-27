@@ -1,0 +1,283 @@
+﻿@model ProductDetailsModel
+@using Nop.Core.Domain.Seo;
+@using Nop.Core.Infrastructure;
+@using Nop.Web.Models.Catalog;
+@{
+    Layout = "~/Views/Shared/_ColumnsOne.cshtml";
+
+    //title
+    Html.AddTitleParts(!String.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    //meta
+    Html.AddMetaDescriptionParts(Model.MetaDescription);
+    Html.AddMetaKeywordParts(Model.MetaKeywords);
+    //page class
+    Html.AppendPageCssClassParts("html-product-details-page");
+
+    var seoSettings = EngineContext.Current.Resolve<SeoSettings>();
+
+    //canonical URL
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var productUrl = Url.RouteUrl("Product", new { SeName = Model.SeName }, this.Request.Url.Scheme);
+        Html.AddCanonicalUrlParts(productUrl);
+    }
+
+    //open graph META tags
+    if (seoSettings.OpenGraphMetaTags)
+    {
+        Html.AddHeadCustomParts("<meta property=\"og:type\" content=\"product\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:title\" content=\"" + Html.Encode(Model.Name) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:description\" content=\"" + Html.Encode(Nop.Core.Html.HtmlHelper.StripTags(Model.MetaDescription)) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:image\" content=\"" + Model.DefaultPictureModel.ImageUrl + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:url\" content=\"" + Request.Url.AbsoluteUri + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"og:site_name\" content=\"" + Html.Encode(Model.CurrentStoreName) + "\" />");
+    }
+
+    //Twitter META tags
+    if (seoSettings.TwitterMetaTags)
+    {
+        Html.AddHeadCustomParts("<meta property=\"twitter:card\" content=\"summary\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:site\" content=\"" + Html.Encode(Model.CurrentStoreName) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:title\" content=\"" + Html.Encode(Model.Name) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:description\" content=\"" + Html.Encode(Nop.Core.Html.HtmlHelper.StripTags(Model.MetaDescription)) + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:image\" content=\"" + Model.DefaultPictureModel.ImageUrl + "\" />");
+        Html.AddHeadCustomParts("<meta property=\"twitter:url\" content=\"" + Request.Url.AbsoluteUri + "\" />");
+    }
+
+    Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_product-details-page.css");
+    Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_product-essential.css");
+    Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_product-overview.css");
+    Html.AppendCssFileParts("~/Themes/Moveleiros/Content/css/_product-details-tab.css");
+}
+<!--product breadcrumb-->
+@section Breadcrumb
+{
+    @Html.Partial("_ProductBreadcrumb", Model.Breadcrumb)
+}
+@Html.Widget("productdetails_after_breadcrumb", Model.Id)
+<div class="page product-details-page">
+    <div class="page-body">
+        @Html.Widget("productdetails_top", Model.Id)
+        @using (Html.BeginRouteForm("Product", new { SeName = Model.SeName }, FormMethod.Post, new { id = "product-details-form" }))
+        {
+            <div itemscope itemtype="http://schema.org/Product" data-productid="@Model.Id">
+                <div class="product-essential">
+
+                    <div class="product-details-top">
+
+                    @Html.Widget("productdetails_before_pictures", Model.Id)
+                    <!--product pictures-->
+                    @Html.Partial("_ProductDetailsPictures", Model)
+                    @Html.Widget("productdetails_after_pictures", Model.Id)
+                    <div class="overview">
+                        @Html.Partial("_Discontinued", Model)
+                        <div class="product-name">
+
+                            <div class="product-title">
+
+                                <h1 itemprop="name">
+                                    @Model.Name - <span>REF. @Model.Id</span> 
+                                </h1>
+                                <!--product reviews-->
+                                @Html.Partial("_ProductReviewOverview", Model.ProductReviewOverview)
+                            </div>
+
+                            @* Brand picture *@
+                            <img alt="@Model.LogoPictureModel.AlternateText" 
+                                 src="@Model.LogoPictureModel.ImageUrl" title="@Model.LogoPictureModel.Title" 
+                                 itemprop="image" id="main-brand-img-@Model.Id" />
+                        </div>
+
+                        <div class="product-subtitle" itemscope itemtype="http://schema.org/Brand">
+                            <div>@T("Moveleiros.Products.ProductCode").Text @Model.Id</div>
+                            <div>@T("Moveleiros.Products.Brand").Text <span itemprop="name">@Model.Brand.Name</span></div>
+                            <div>
+                                <strong itemprop="description">@T("Moveleiros.Products.SellBy").Text @Model.SellerStoreName</strong>
+                            </div>
+                            <div>
+                                @string.Format(T("Moveleiros.Products.Address").Text, Model.StoreShortAddress)
+                            </div>
+                        </div>
+
+                        @if (Model.ColorPictureModels.Count > 0)
+                        {
+                        <div class="product-color">
+                            <div>Cores Disponíveis</div>
+                            <div class="color-row">
+                                @foreach (var color in Model.ColorPictureModels)
+                                {
+                                    <a href="@color.ImageUrl" title="@color.Title" data-slide-color>
+                                        <img alt="@color.Title" src="@color.ImageUrl"
+                                                 title="@color.Title" class="image-row" />
+                                    </a>
+                                }
+
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        $('a[data-slide-color]').magnificPopup(
+                                        {
+                                            type: 'image',
+                                            removalDelay: 300,
+                                            gallery: {
+                                                enabled: true,
+                                                tPrev: '@T("Media.MagnificPopup.Previous")',
+                                                tNext: '@T("Media.MagnificPopup.Next")',
+                                                tCounter: '@T("Media.MagnificPopup.Counter")'
+                                            },
+                                            tClose: '@T("Media.MagnificPopup.Close")',
+                                            tLoading: '@T("Media.MagnificPopup.Loading")'
+                                        });
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                        }
+
+                        <div class="product-price-area">
+                            <div class="product-price-left">
+                                @{
+                                    var dataDictPrice = new ViewDataDictionary();
+                                    dataDictPrice.TemplateInfo.HtmlFieldPrefix = string.Format("price_{0}", Model.Id);
+                                    @Html.Partial("_ProductPrice", Model.ProductPrice, dataDictPrice)
+                                }
+                            </div>
+                            <div class="product-price-right">
+                                @{
+                                    var dataDictAddToCart = new ViewDataDictionary{ { "seName", Model.Breadcrumb.ProductSeName } };
+                                    dataDictAddToCart.TemplateInfo.HtmlFieldPrefix = string.Format("addtocart_{0}", Model.Id);
+                                    @Html.Partial("_AddToCart", Model.AddToCart, dataDictAddToCart)
+                                }
+                            </div>
+                        </div>
+
+                        @if (!String.IsNullOrEmpty(Model.ShortDescription))
+                        {
+                            <div class="short-description">
+                                @Html.Raw(Model.ShortDescription)
+                            </div>
+                        }
+                        @Html.Widget("productdetails_overview_top", Model.Id)
+                        
+                        <!--availability-->
+                        @Html.Partial("_Availability", Model)
+                        <!--delivery-->
+                        @Html.Partial("_DeliveryInfo", Model)
+                        <!--sample download-->
+                        @Html.Partial("_DownloadSample", Model)
+                        <!--attributes-->
+                        @{
+                            var dataDictAttributes = new ViewDataDictionary();
+                            dataDictAttributes.TemplateInfo.HtmlFieldPrefix = string.Format("attributes_{0}", Model.Id);
+                            @Html.Partial("_ProductAttributes", Model.ProductAttributes, dataDictAttributes)
+                        }
+                        <!--gift card-->
+                        @{
+                            var dataDictGiftCard = new ViewDataDictionary();
+                            dataDictGiftCard.TemplateInfo.HtmlFieldPrefix = string.Format("giftcard_{0}", Model.Id);
+                            @Html.Partial("_GiftCardInfo", Model.GiftCard, dataDictGiftCard)
+                        }
+                        <!--rental info-->
+                        @{
+                            var dataDictRental = new ViewDataDictionary();
+                            dataDictRental.TemplateInfo.HtmlFieldPrefix = string.Format("rental_{0}", Model.Id);
+                            @Html.Partial("_RentalInfo", Model, dataDictRental)
+                        }
+                        <!--price & add to cart-->
+                        @{
+                            
+
+                            @Html.Partial("_ProductTierPrices", Model.TierPrices)
+
+                            
+                        }
+                        <!--wishlist, compare, email a friend-->
+                        <div class="overview-buttons">
+                            @Html.Widget("productdetails_inside_overview_buttons_before", Model.Id)
+                            @{
+                                var dataDictAddToWishlist = new ViewDataDictionary();
+                                dataDictAddToWishlist.TemplateInfo.HtmlFieldPrefix = string.Format("addtocart_{0}", Model.Id);
+                                @Html.Partial("_AddToWishlist", Model.AddToCart, dataDictAddToWishlist)
+                            }
+
+                            @*@Html.Partial("_CompareProductsButton", Model)*@
+
+                            @Html.Partial("_ProductEmailAFriendButton", Model)
+                            @Html.Widget("productdetails_inside_overview_buttons_after", Model.Id)
+                        </div>
+
+                        @*@Html.Partial("_ShareButton", Model)*@
+                        @Html.Widget("productdetails_overview_bottom", Model.Id)
+                    </div>
+
+                    </div>
+
+                    <div class="product-details-tab">
+
+                        <input id="tab1" type="radio" name="tabs" checked>
+                        <label for="tab1">@T("Moveleiros.ProductDetail.Description")</label>
+                        @if (Model.DimensionPicture != null)
+                        {
+                        <input id="tab2" type="radio" name="tabs">
+                        <label for="tab2">@T("Moveleiros.ProductDetail.Dimension")</label>
+                        }
+
+                        @if (!String.IsNullOrEmpty(Model.ProjectContains))
+                        {
+                            <section id="content1" class="project-contains">
+                                <div itemprop="description">
+                                    <strong>@Model.Name - Ref. @Model.Id, esta sugestão contém:</strong> 
+                                    @Html.Raw(Model.ProjectContains)
+
+                                    @if (!string.IsNullOrEmpty(Model.ProjectDescription))
+                                    {
+                                        <strong>Características do projeto:</strong>
+                                        @Html.Raw(Model.ProjectDescription)
+                                    }
+                                </div>
+
+                                @if (!string.IsNullOrEmpty(Model.AsideObservation))
+                                {
+                                    <div class="aside-observation">
+                                        @Html.Raw(Model.AsideObservation)
+                                    </div>
+                                }
+                            </section>
+                        }
+
+                        @if (Model.DimensionPicture != null)
+                        {
+                            <section id="content2" class="project-dimension">
+                                @Html.Raw(Model.DimensionDescription)
+
+                                @* Dimension picture *@
+                                <a href="@Model.DefaultDimensionPicture.FullSizeImageUrl" title="@Model.DimensionPicture.Title" 
+                                   id="main-dimension-img-lightbox-anchor-@Model.Id" >
+
+                                    <img alt="@Model.DimensionPicture.AlternateText"
+                                         src="@Model.DimensionPicture.ImageUrl" title="@Model.DimensionPicture.Title"
+                                         href="@Model.DefaultDimensionPicture.FullSizeImageUrl"
+                                         id="main-dimension-img-@Model.Id" />
+                                </a>
+
+                                <script type="text/javascript">
+                                    $(document).ready(function () {
+                                        lightGallery($('#main-dimension-img-lightbox-anchor-@Model.Id')[0]);
+                                    });
+                                </script>
+                            </section>
+                        }
+                    </div>
+
+                </div>
+                @Html.Widget("productdetails_before_collateral", Model.Id)
+                <div class="product-collateral">
+                    @Html.Partial("_ProductSpecifications", Model.ProductSpecifications)
+                    @Html.Partial("_ProductTags", Model.ProductTags)
+                </div>
+                @Html.Action("ProductsAlsoPurchased", "Product", new { productId = Model.Id })
+                @Html.Action("RelatedProducts", "Product", new { productId = Model.Id })
+            </div>
+        }
+        @Html.Widget("productdetails_bottom", Model.Id)
+    </div>
+</div>

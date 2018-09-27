@@ -1,0 +1,11 @@
+﻿/*[data-content] > * {
+    padding: 5px 10px;
+}*/
+
+[data-accordion] > [data-content] {
+    padding: 10px 10px;
+}
+
+[data-accordion].open > [data-content] {
+
+}

@@ -1,0 +1,54 @@
+﻿@model Nop.Web.Models.Catalog.SearchModel
+
+@{
+    Layout = null;
+
+    var randomId = Guid.NewGuid().ToString();
+}
+
+<div id="@randomId" class="sub-container">
+
+@foreach (var brand in Model.SelectedBrands)
+{
+    <div>
+        <label class="selectable">
+            <input id="selbrands_@brand.Id" type="checkbox" value="@brand.Id" data-label="@brand.Name"
+                name="selbrands" @(brand.Selected ? "checked" : "") /> 
+            <span class="check-label">@brand.Name</span>
+        </label>
+    </div>
+}
+
+</div>
+
+<div class="buttons-container">
+    <input type="button" id="@(randomId)_save-brands" value="@T("Moveleiros.Filter")" />
+</div>
+
+<script>
+    $(function () {
+
+        $('#@randomId')
+            .find('input[type=checkbox], input[type=radio]')
+            .iCheck({
+                checkboxClass: 'icheckbox_square-blue',
+                radioClass: 'iradio_square-blue',
+                increaseArea: '30%'
+            });
+
+        $('#@(randomId)_save-brands')
+            .on('click', function (e) {
+
+                e.preventDefault();
+
+                if (window.afterSelectBrands) {
+
+                    var inputs = $('#@randomId').find(':input:checkbox');
+
+                    window.afterSelectBrands(inputs);
+                }
+
+                window.MovScripts.closePopup();
+            });
+    })
+</script>

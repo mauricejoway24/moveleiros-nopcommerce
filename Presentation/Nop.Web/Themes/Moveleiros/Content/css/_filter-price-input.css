@@ -1,0 +1,11 @@
+﻿.double-inputs .price-range input {
+    width: 50%;
+}
+
+.double-inputs .price-from {
+    margin-right: 2px;
+}
+
+.double-inputs .price-to {
+    margin-left: 2px;
+}

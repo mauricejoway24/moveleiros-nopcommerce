@@ -1,0 +1,9 @@
+﻿Group: Shipping rate computation
+FriendlyName: Shipping Director
+SystemName: Shipping.Director
+Version: 1.33
+SupportedVersions: 3.90
+Author: nopTools
+DisplayOrder: 1
+FileName: Nop.Plugin.Shipping.Director.dll
+Description: Shipping Director allows a store owner to calculate shipping options and rates for complex scenarios

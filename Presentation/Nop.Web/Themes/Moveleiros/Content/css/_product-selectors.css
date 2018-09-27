@@ -1,0 +1,31 @@
+﻿.product-selectors {
+    padding: 0px 0px 10px;
+    border: none;
+    float: right;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+
+    .product-selectors {
+        float: none;
+        display: inline-block;
+        width: 100%;
+    }
+
+        .product-selectors > div {
+            margin: 5px 0;
+        }
+
+        .product-selectors .product-sorting {
+            width: 100%;
+        }
+
+    #products-orderby {
+        width: 100%;
+    }
+
+    .product-selectors select {
+        margin: 0;
+    }
+}

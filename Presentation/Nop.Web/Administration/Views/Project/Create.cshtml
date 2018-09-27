@@ -1,0 +1,122 @@
+﻿@model Nop.Admin.Models.Projects.ProjectModel
+@{
+    ViewBag.Title = "Create";
+    var selectCategories = ViewBag.AvailableCategories as List<SelectListItem>;
+    var selectBrands = ViewBag.AvailableBrands as List<SelectListItem>;
+
+    Html.AppendCssFileParts("~/Administration/Content/tagEditor/jquery.tag-editor.css");
+    Html.AppendScriptParts("~/Administration/Scripts/kendo/2014.1.318/kendo.multiselect.min.js");
+    Html.AppendScriptParts("~/Administration/Scripts/tagEditor/jquery.tag-editor.min.js");
+    Html.AppendScriptParts("~/Administration/Scripts/tagEditor/jquery.caret.min.js");
+    Html.SetActiveMenuItemSystemName("Project List");
+}
+
+<style>
+    form {
+        padding: 0 25px;
+    }
+
+    .form-group {
+        clear: both;
+        padding: 15px 0;
+    }
+</style>
+
+@using (Html.BeginForm("Create", "Project", FormMethod.Post, new { enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="content-header clearfix">
+        <h1 class="pull-left">Criação de Projetos</h1>
+    </div>
+    <div class="panel-group">
+        <div class="panel panel-default panel-popup">
+
+            <div class="panel-body">
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        Nome
+                    </div>
+                    <div class="col-sm-9">
+                        @Html.NopEditorFor(model => model.Name)
+                        @Html.ValidationMessageFor(model => model.Name)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        Descrição
+                    </div>
+                    <div class="col-sm-9">
+                        @Html.TextAreaFor(model => model.Description, new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Description)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        Arquivo Promob
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="file" name="PromobFile" id="PromobFile" />
+                        @Html.ValidationMessageFor(model => model.PromobFile)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        Imagens
+                    </div>
+                    <div class="col-sm-9">
+                        <input type="file" name="Pictures" id="Pictures" multiple />
+                        @Html.ValidationMessageFor(model => model.Pictures)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        Categorias
+                    </div>
+                    <div class="col-sm-9">
+                        @Html.DropDownListFor(model => model.CategoriesId, selectCategories, "Selecione", new { multiple = "multiple", data_role = "multiselect" })
+                        @Html.ValidationMessageFor(model => model.CategoriesId)
+                        <script>
+                            $(document).ready(function () {
+                                $('#@Html.FieldIdFor(model => model.CategoriesId)').kendoMultiSelect({
+                                    select: function (e) {
+                                        var current = this.value();
+
+                                        if (this.dataSource.view()[e.item.index()].value === "0") {
+                                            this.value("");
+                                        }
+                                        else if (current.indexOf("0") !== -1) {
+                                            current = $.grep(current, function (value) {
+                                                return value !== "0";
+                                            });
+
+                                            this.value(current);
+                                        }
+                                    },
+                                    change: function (e) {
+                                        if (this.value().length === 0)
+                                            this.value(["0"]);
+                                    }
+                                }).data("kendoMultiSelect");
+                            });
+                        </script>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-3">
+                        Marcas
+                    </div>
+                    <div class="col-sm-9">
+                        @Html.DropDownListFor(model => model.BrandId, selectBrands, "Selecione", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.BrandId)
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" name="save" class="btn bg-blue">
+        <i class="fa fa-floppy-o"></i>
+        @T("Admin.Common.Save")
+    </button>
+}

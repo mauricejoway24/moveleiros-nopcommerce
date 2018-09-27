@@ -1,0 +1,332 @@
+﻿@model IEnumerable<Project>
+@using Nop.Core.Domain.Projects;
+@{
+    ViewBag.Title = "Index";
+    Html.SetActiveMenuItemSystemName("Project List");
+}
+
+<style>
+    /* navbar */
+    .navbar-default {
+        box-shadow: none;
+        background: white;
+        border-radius: 0;
+        border: none;
+        border-bottom: 3px solid #3c8dbc;
+        margin: 0;
+    }
+
+    .navbar-header {
+        text-align: center;
+        width: 100%;
+    }
+
+    .navbar-brand {
+        float: none;
+        height: auto;
+        display: inline-block;
+    }
+
+    .flexbox {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    .navbar-menu .navbar-header {
+        width: auto;
+        float: none;
+    }
+
+    .navbar-menu .navbar-nav {
+        width: auto;
+        float: none;
+    }
+
+    .navbar-nav li.active a {
+        box-shadow: none !important;
+        background: #285066 !important;
+        color: white !important;
+    }
+    /* navbar */
+
+    /* cards */
+    .card-item {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column;
+        padding: 1px;
+        border-radius: 3px;
+        overflow: hidden;
+        background: #f2f2f2;
+        cursor: pointer;
+        margin-bottom: 30px;
+        text-align: center;
+        border: 1px solid #dbdbdb;
+        -webkit-transition: all 0.3s ease;
+        -moz-transition: all 0.3s ease;
+        transition: all 0.3s ease;
+    }
+
+    .card-item-info {
+        width: 100%;
+        margin-bottom: 20px;
+    }
+
+    .card-item-info-title {
+        margin-top: 0;
+        margin-bottom: 0px;
+        text-align: center;
+        font-weight: bold;
+    }
+
+    .card-item-info span {
+        color: #bdbdbd;
+        font-size: 1em;
+        font-weight: bold;
+        text-align: center;
+        margin-bottom: 20px;
+        font-style: italic;
+        display: block;
+        margin: auto;
+    }
+
+    .card-item-info a {
+        margin-bottom: 20px;
+    }
+
+    .card-item-info-desc {
+        margin-top: 10px;
+        text-align: center;
+        margin-bottom: 20px;
+        font-size: 0.9em;
+    }
+
+    .card-item .btn-danger {
+        background: rgb(245, 132, 132);
+    }
+
+    .card-item > img {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+
+    /* box */
+    .box-item {
+        padding: 20px;
+        background: #f2f2f2;
+        margin-bottom: 30px;
+    }
+
+        .box-item .thumb-small {
+            display: inline-block;
+            margin: 0 15px 20px 0;
+        }
+
+        .box-item.box-style2 {
+            padding: 20px 30px;
+            border-radius: 5px;
+        }
+
+        .box-item.box-style3 {
+            background: #fff;
+            border: 1px solid #dbdbdb;
+            border-radius: 5px;
+        }
+
+        .box-item label {
+            float: left;
+        }
+
+    .login-box {
+        background: #dbdbdb;
+        padding: 20px;
+        border-radius: 10px;
+    }
+
+    /* list */
+    .list-default {
+        list-style: none;
+        padding: 0;
+    }
+
+    .thumb-small {
+        width: 50px;
+        border-radius: 50%;
+    }
+    /* list */
+
+    /* titles */
+    .title {
+        font-weight: bold;
+        margin-bottom: 25px;
+    }
+    /* titles */
+
+    /* buttons */
+    .btn {
+        padding: 10px 15px;
+        border-radius: 0;
+        border: none;
+    }
+
+    .btn-primary {
+        background: #3c8dbc;
+    }
+
+    .btn-full {
+        width: 100%;
+    }
+    /* buttons */
+
+    /* inputs */
+    .form-control {
+        border-radius: 0;
+    }
+
+    .radio {
+        margin-bottom: 20px;
+    }
+    /* inputs */
+
+    /* alert */
+    .alert {
+        z-index: 999;
+    }
+
+    .alert-fade-out {
+        position: absolute;
+        right: 30px;
+        top: 30px;
+    }
+
+        .alert-fade-out a {
+            padding-left: 30px;
+        }
+    /* alert */
+
+    /* tables */
+    .table-default td {
+        vertical-align: middle !important;
+    }
+
+    .table-mini img {
+        width: 50px;
+    }
+
+    /* .blocks */
+    .block-default {
+        padding: 30px;
+        font-size: 20px;
+        text-transform: uppercase;
+        font-weight: bold;
+    }
+
+    /* footer */
+    .footer {
+        padding: 15px;
+    }
+
+    /* utils */
+    .section-spaced {
+        padding: 50px 0px 20px 0px;
+    }
+
+    .section-default {
+        padding-bottom: 30px;
+    }
+
+    .clearfix {
+        clear: both;
+    }
+
+    /* utils - backgrounds */
+    .bg-light {
+        background: #ecf0f5;
+    }
+
+    .bg-white {
+        background: white;
+    }
+
+    .bg-primary {
+        background-color: #3c8dbc;
+    }
+
+    .bg-secondary {
+        background-color: #285066;
+    }
+    /* utils - colors */
+    .color-white {
+        color: white;
+    }
+
+    .color-primary {
+        color: #3c8dbc;
+    }
+
+    .color-secondary {
+        color: #285066;
+    }
+</style>
+
+<div class="container">
+    <div class="row">
+        <div class="col-sm-8">
+            <h1 class="title color-secondary">Meus projetos</h1>
+        </div>
+        <div class="col-sm-2" style="padding-right: 50px;">
+            <br>
+            <a href="~/Admin/Project/Create" class="btn btn-primary pull-right">Cadastrar novo</a>
+        </div>
+        <div class="col-sm-2"></div>
+    </div>
+    <div class="row">
+        @if (Model != null && Model.Any())
+        {
+            foreach (var project in Model)
+            {
+                <div class="col-md-3 col-sm-4">
+                    <div class="card-item bg-white">
+                        <img class="img-responsive" src="@project.Pictures.FirstOrDefault().UrlImage" alt="@project.Name">
+                        <div class="card-item-info">
+                            <h3 class="card-item-info-title">@project.Name</h3>
+                            <span>@project.Clicks cliques</span>
+                            <p class="card-item-info-desc">
+                                @project.Description
+                            </p>
+                            <a href="~/Admin/Project/Edit/@project.Id" class="btn btn-default">Editar</a>
+                            <a href="#" data-id="@project.Id" class="delete btn btn-danger">Excluir</a>
+                        </div>
+                    </div>
+                </div>
+            }
+        }
+        else
+        {
+            <div class="col-md-3 col-sm-4">
+                <h3> Nenhum projeto cadastrado!</h3>
+            </div>
+        }
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.delete').on('click', function () {
+            if (confirm('Você realmente deseja deletar esse projeto?')) {
+                var id = $(this).attr('data-id');
+                $('#deleteId').val(id);
+                $('#deleteForm').submit();
+            }
+        });
+    });
+</script>
+
+@using (Html.BeginForm("Delete", "Project", FormMethod.Post, new { id = "deleteForm" }))
+{
+    @Html.AntiForgeryToken()
+    <input type="hidden" name="id" id="deleteId" />
+}

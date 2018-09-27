@@ -1,0 +1,7 @@
+﻿.product-sorting {
+    float: right;
+}
+
+    .product-sorting select {
+        padding: 3px;
+    }

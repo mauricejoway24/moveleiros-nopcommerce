@@ -1,0 +1,36 @@
+﻿.gallery .picture-thumbs .thumb-item {
+    margin: 0 5px 0px;
+    display: inline-block;
+    min-width: 100px;
+}
+
+.gallery .picture-thumbs {
+    display: inline-flex;
+    max-width: 100%;
+    overflow-x: auto;
+}
+
+.gallery .picture {
+    display: flex;
+    align-items: center;
+    height: 400px;
+    overflow-x: hidden;
+    justify-content: center;
+}
+
+    .gallery .picture img {
+        position: initial;
+        max-width: none;
+    }
+
+    .gallery .picture a {
+        height: 100%;
+    }
+
+@media (max-width: 1000px) {
+
+    .gallery {
+        margin: 0 !important;
+        width: 100%;
+    }
+}

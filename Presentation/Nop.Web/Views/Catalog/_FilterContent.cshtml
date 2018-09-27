@@ -1,0 +1,167 @@
+﻿@model Nop.Web.Models.Catalog.SearchModel
+
+<div data-accordion-group>
+
+    @if (!string.IsNullOrEmpty(Model.q))
+    {
+        <div class="accordion open" data-accordion>
+            <div data-control>@T("Moveleiros.Search.Keyword")</div>
+            <div data-content class="city" data-filter="q" data-filter-type="keyword">
+                <div class="content-margin">
+                    @Html.TextBoxFor(model => model.q, new { @class = "city", placeholder = "Palavra chave" })
+                </div>
+            </div>
+        </div>
+    }
+
+    <div class="accordion open" data-accordion>
+        <div data-control>@T("Moveleiros.Search.City")</div>
+        <div data-content class="city" data-filter="city" data-filter-type="city">
+            <div class="content-margin">
+                @Html.TextBoxFor(model => model.City, new { @class = "city", placeholder = "Ex: São Paulo", data_city = "" })
+                <div class="geo-location-parent">
+                    <a href="javascript:void(0);" data-geonotification onclick="MovScripts.getPosition($(this)); return false;" class="get-location">
+                        @T("Moveleiros.Search.MyLocation")
+                    </a>
+                    <i class="fa fa-spinner fa-spin" style="display: none"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div name="category" class="accordion open" data-accordion>
+        <div data-control>@T("Moveleiros.Search.Category")</div>
+        <div data-content data-filter="selcats" data-filter-type="checkbox">
+            <div class="content-margin">
+                @foreach (var category in Model.SelectedCategories)
+                {
+                    var ix = Model.SelectedCategories.IndexOf(category);
+
+                    <div data-fixed>
+                        <label class="selectable">
+
+                            <input id="selcats_@Model.SelectedCategories[ix].Id" type="checkbox" value="@Model.SelectedCategories[ix].Id"
+                                   name="selcats" data-label="@category.Name" @(category.Selected ? "checked" : "") />
+                            <span class="check-label">@category.Name</span>
+                        </label>
+                    </div>
+                }
+                <div data-see-all="@Url.Action("FilterCategories", "Catalog")" data-see-all-title="@T("Moveleiros.SelectCategories")">
+                    <a>Ver todos os ambientes</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @if (Model.SelectedCategories.Any(t => t.Selected))
+    {
+        <div name="subcategory" class="accordion open" data-accordion>
+            <div data-control>@T("Moveleiros.Search.SubCategory")</div>
+            <div data-content data-filter="selcats" data-filter-type="checkbox">
+                <div class="content-margin">
+                    @foreach (var category in Model.SelectedSubCategories)
+                    {
+                        var ix = Model.SelectedSubCategories.IndexOf(category);
+
+                        <div data-fixed>
+                            <label class="selectable">
+                                <input id="selcats_@Model.SelectedCategories[ix].Id" type="checkbox" value="@Model.SelectedSubCategories[ix].Id"
+                                       name="selcats" data-label="@category.Name" @(category.Selected ? "checked" : "") />
+                                <span class="check-label">@category.Name</span>
+                            </label>
+                        </div>
+                    }
+                    <div data-see-all="@Url.Action("FilterSubCategories", "Catalog")" data-see-all-title="@T("Moveleiros.SelectSubCategories")">
+                        <a>Ver todas as categorias</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+    @{
+        var areaShouldBeOpen = !string.IsNullOrEmpty(Model.AreaFrom) || !string.IsNullOrEmpty(Model.AreaTo);
+        var areaClass = areaShouldBeOpen ? "open" : "";
+    }
+    <div class="accordion open" data-accordion>
+        <div data-control>@T("Moveleiros.Search.Area")</div>
+        <div data-content>
+            <div class="content-margin">
+                <div class="double-inputs">
+                    <span class="area-range">
+                        @Html.TextBoxFor(model => model.AreaFrom, new
+                        {
+                            @class = "area-from",
+                            placeholder = "1 m²",
+                            data_filter = "AreaFrom",
+                            data_filter_type = "number"
+                        })
+
+                        @Html.TextBoxFor(model => model.AreaTo, new
+                        {
+                            @class = "area-to",
+                            placeholder = "1 m²",
+                            data_filter = "AreaTo",
+                            data_filter_type = "number"
+                        })
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @{
+        var priceShouldBeOpen = !string.IsNullOrEmpty(Model.pf) || !string.IsNullOrEmpty(Model.pt);
+        var priceClass = priceShouldBeOpen ? "open" : "";
+    }
+    <div class="accordion open" data-accordion>
+        <div data-control>@T("Moveleiros.Search.PriceRange")</div>
+        <div data-content>
+            <div class="content-margin">
+                <div class="double-inputs">
+                    <span class="price-range">
+                        @Html.TextBoxFor(model => model.pf, new
+                        {
+                            @class = "price-from",
+                            placeholder = "R$ 1,00",
+                            data_filter = "pf",
+                            data_filter_type = "number",
+                            @type = "number"
+                        })
+
+                        @Html.TextBoxFor(model => model.pt, new
+                        {
+                            @class = "price-to",
+                            placeholder = "R$ 10.000",
+                            data_filter = "pt",
+                            data_filter_type = "number",
+                            @type = "number"
+                        })
+                    </span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @{
+        var brandClass = Model.selBrands != null && Model.selBrands.Any() ? "open" : "";
+    }
+    <div class="accordion open" data-accordion>
+        <div data-control>@T("Moveleiros.Search.Brand")</div>
+        <div data-content data-filter="selbrands" data-filter-type="checkbox">
+            <div class="content-margin">
+                @foreach (var brand in Model.SelectedBrands)
+                {
+                <div data-fixed>
+                    <label class="selectable">
+                    <input id="selbrands_@brand.Id" type="checkbox" value="@brand.Id" data-label="@brand.Name"
+                            name="selbrands" @(brand.Selected ? "checked" : "")> <span class="check-label">@brand.Name</span>
+                    </label>
+                </div>
+                }
+                <div data-see-all="@Url.Action("FilterBrands", "Catalog")" data-see-all-title="@T("Moveleiros.SelectBrands")">
+                    <a>Ver todas as marcas</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

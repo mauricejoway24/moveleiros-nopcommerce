@@ -1,0 +1,79 @@
+﻿@{ 
+    var renderFilter = ViewBag.RenderFilter != null && ViewBag.RenderFilter ? true : false;
+}
+<div class="pre-header">
+    <div class="header">
+        @Html.Widget("header")
+        <div class="header-logo">
+            @Html.Action("Logo", "Common")
+            <div class="ui-helper-clearfix"></div>
+        </div>
+        <div class="header-upper-top">
+            <div class="header-upper">
+                <div class="header-selectors-wrapper">
+                    @Html.Action("TaxTypeSelector", "Common")
+                    @Html.Action("CurrencySelector", "Common")
+                    @Html.Action("LanguageSelector", "Common")
+                    @Html.Widget("header_selectors")
+                </div>
+
+                <div class="header-links-wrapper">
+                    <div class="header-links-left">
+                        @Html.Action("HeaderLinksLeft", "Common")
+                    </div>
+                    @Html.Action("HeaderLinks", "Common")
+                    @Html.Action("FlyoutShoppingCart", "ShoppingCart")
+                </div>
+            </div>
+        </div>
+        <div class="header-lower">
+
+            <div class="search-box store-search-box">
+                @Html.Action("SearchBox", "Catalog")
+            </div>
+        </div>
+    </div>
+
+    <div class="header-mobile">
+
+        @if (renderFilter) {
+            <div class="left-slide">
+                <i id="toggle-sidebar-filter" class="fa fa-filter"></i>
+            </div>
+        }
+
+        <div class="header-logo">
+            <a href="@Url.RouteUrl("HomePage")" class="logo-link">
+                <img src="https://www.moveleiros.com.br/images_db/mp/images/marketplace/generics/logo-white.svg" alt="Moveleiros" />
+            </a>
+
+            <div class="ui-helper-clearfix"></div>
+        </div>
+
+        <div class="right-slide">
+            <i id="toggle-sidebar-menu" class="fa fa-bars"></i>
+        </div>
+
+        <div class="clearfix"></div>
+    </div>
+
+    <div class="header-lower-mobile">
+        <div class="header-lower">
+
+            <div class="search-box store-search-box">
+                @Html.Action("SearchBox", "Catalog")
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div id="sidebar-menu" class="sidebar sidebar-right">
+    <div id="sidebar-wrapper" class="sidebar-wrapper menu-mobile">
+
+        <h1>Menu</h1>
+
+        @Html.Action("HeaderLinksLeft", "Common")
+        @Html.Action("HeaderLinks", "Common")
+    </div>
+</div>

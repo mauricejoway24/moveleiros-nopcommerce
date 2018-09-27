@@ -1,0 +1,567 @@
+﻿@{
+    Layout = "";
+}
+@model ShippingDirectorListModel
+@using Nop.Plugin.Shipping.Director.Models;
+@using Nop.Web.Framework;
+
+<div style="font-weight:bold;float:left;margin-bottom:4px;@if (!Model.IsLicensed) { Html.Raw("color:red"); }">
+    <a class="fa fa-question-circle" title="Contact nopTools for support" href="http://www.noptools.com/contactus" target="_blank"></a>
+    @Model.Identification
+    <div style="color:red">@(Model.OtherShippingRateMethodsAreActive ? "Warning: Other rate calc methods are active" : "") </div>
+</div>
+
+<div class="options" style="float:right;margin-bottom:4px;">
+    @if (Model.ShippingDirectorIsActive)
+    {
+    <input type="button" id="testrules" name="testrules" class="btn bg-blue" value="@T("Plugins.Shipping.Director.Test")" />
+    }
+    else
+    {
+    <span style="color:red">SD is not active</span>
+    }
+    <a href="@Url.Action("ExportTabDelimited")" class="btn bg-blue">@T("Plugins.Shipping.Director.Export")</a>
+    <input type="button" id="import" name="import" class="btn bg-blue" value="@T("Plugins.Shipping.Director.Import")" />
+</div>
+
+<table class="adminContent">
+    <tr>
+        <td>
+            <div id="shipping-rate-grid"></div>
+            <script>
+                $(document).ready(function () {
+                    $("#shipping-rate-grid").kendoGrid({
+                        dataSource: {
+                            type: "json",
+                            transport: {
+                                read: {
+                                    url: "@Html.Raw(Url.Action("RatesList", "ShippingDirector", new RouteValueDictionary() { { "Namespaces", "Nop.Plugin.Shipping.ShippingDirector.Controllers" }, { "area", "" } }))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: addAntiForgeryToken
+                                },
+                                update: {
+                                    url: "@Html.Raw(Url.Action("RateUpdate", "ShippingDirector", new RouteValueDictionary() { { "Namespaces", "Nop.Plugin.Shipping.ShippingDirector.Controllers" }, { "area", "" } }))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: addAntiForgeryToken
+                                },
+                                destroy: {
+                                    url: "@Html.Raw(Url.Action("RateDelete", "ShippingDirector", new RouteValueDictionary() { { "Namespaces", "Nop.Plugin.Shipping.ShippingDirector.Controllers" }, { "area", "" } }))",
+                                    type: "POST",
+                                    dataType: "json",
+                                    data: addAntiForgeryToken
+                                }
+                            },
+                            schema: {
+                                data: "Data",
+                                total: "Total",
+                                errors: "Errors",
+                                model: {
+                                    id: "Id",
+                                    fields: {
+                                        Active: { editable: true, type: "boolean" },
+                                        EvalType: { editable: false }
+                                    }
+                                }
+                            },
+                            requestEnd: function (e) {
+                                if (e.type == "update") {
+                                    this.read();
+                                }
+                            },
+                            error: function (e) {
+                                display_kendoui_grid_error(e);
+                                // Cancel the changes
+                                this.cancelChanges();
+                            },
+                            serverPaging: true,
+                            serverFiltering: true,
+                            serverSorting: true
+                        },
+                        pageable: {
+                            refresh: true,
+                            numeric: false,
+                            previousNext: false,
+                            info: false
+                        },
+                        editable: {
+                                confirmation: "@T("Admin.Common.DeleteConfirmation")",
+                                mode: "inline"
+                        },
+                        scrollable: false,
+                        columns: [{
+                            field: "EvalOrder",
+                            title: "@T("Plugins.Shipping.Director.Fields.EvalOrder")",
+                            width: 20
+                        }, {
+                            field: "Active",
+                            title: "@T("Plugins.Shipping.Director.Fields.Active")",
+                            attributes: { style: "text-align:center" },
+                            template: "<input name='Active' type='checkbox' disabled='disabled' class='checkboxGroups' # if(Active) {# checked='checked' #} # />",
+                            width: 30
+                        }, {
+                            field: "EvalType",
+                            title: "@T("Plugins.Shipping.Director.Fields.EvalType")",
+                            width: 30
+                        }, {
+                            field: "Name",
+                            title: "@T("Plugins.Shipping.Director.Fields.Name")",
+                            width: 100
+                        }, {
+                            field: "Expression",
+                            title: "@T("Plugins.Shipping.Director.Fields.Expression")",
+                            width: 100
+                        }, {
+                            field: "RateExpression",
+                            title: "@T("Plugins.Shipping.Director.Fields.RateExpression")",
+                            width: 100
+                        }, {
+                            field: "SurchargeExpression",
+                            title: "@T("Plugins.Shipping.Director.Fields.SurchargeExpression")",
+                            width: 100
+                        }, {
+                            field: "NameExpression",
+                            title: "@T("Plugins.Shipping.Director.Fields.NameExpression")",
+                            width: 100
+                        }, {
+                            field: "DescriptionExpression",
+                            title: "@T("Plugins.Shipping.Director.Fields.DescriptionExpression")",
+                            width: 100
+                        }, {
+                            command: { name: "edit", text: "@T("Admin.Common.Edit")" },
+                            title: "@T("Admin.Common.Edit")",
+                            width: 100,
+                        }, {
+                            command: { name: "destroy", text: "@T("Admin.Common.Delete")" },
+                            title: "@T("Admin.Common.Delete")",
+                            width: 100
+                        }]
+                    });
+                });
+            </script>
+        </td>
+    </tr>
+</table>
+<p>
+</p>
+@using (Html.BeginForm())
+{
+@Html.AntiForgeryToken()    
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#@Html.FieldIdFor(model => model.AddEvalType)").change(toggleOption);
+        toggleOption();
+    });
+
+    function toggleOption() {
+        var typ = $('#@Html.FieldIdFor(model => model.AddEvalType)').val().substring(0, 3);
+
+        switch (typ) {
+            case "Opt":
+                $('#pnlOptionRate').show();
+                $('#pnlOptionSurcharge').show();
+                $('#pnlOptionName').show();
+                $('#pnlOptionDescription').show();
+                break;
+            case "Pac":
+                $('#pnlOptionRate').hide();
+                $('#pnlOptionSurcharge').hide();
+                $('#pnlOptionName').hide();
+                $('#pnlOptionDescription').hide();
+                break;
+            case "Err":
+                $('#pnlOptionRate').hide();
+                $('#pnlOptionSurcharge').hide();
+                $('#pnlOptionName').hide();
+                $('#pnlOptionDescription').show();
+                break;
+            default:
+                $('#pnlOptionRate').hide();
+                $('#pnlOptionSurcharge').hide();
+                $('#pnlOptionName').hide();
+                $('#pnlOptionDescription').hide();
+        }
+
+        if (typ == "Pac") {
+            $('#pnlPackingMethod').show();
+            $('#pnlPackingRequiresOwnPackage').show();
+            $('#pnlPackingSender').show();
+            $('#pnlPackingExcludeItem').show();
+        }
+        else {
+            $('#pnlPackingMethod').hide();
+            $('#pnlPackingRequiresOwnPackage').hide();
+            $('#pnlPackingSender').hide();
+            $('#pnlPackingExcludeItem').hide();
+        }
+    }
+
+    function clearFields() {
+        $('#AddName').val('');
+        $('#AddExpression').val('');
+        $('#AddRateExpression').val('');
+        $('#AddSurchargeExpression').val('');
+        $('#AddNameExpression').val('');
+        $('#AddDescriptionExpression').val('');
+        $('#AddPackingMethod').val('');
+        $('#AddPackingRequiresOwnPackageExpression').val('');
+        $('#AddPackingSenderExpression').val('');
+        toggleOption();
+    }
+
+</script>    
+    
+    <div class="panel-group">
+        <div class="panel panel-default">
+            <div class="panel-body">    
+
+                <legend><span style="font-weight: bold">@T("Plugins.Shipping.Director.AddNewRecordTitle")</span></legend>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.AddEvalOrder)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.AddEvalOrder)
+                        @Html.ValidationMessageFor(model => model.AddEvalOrder)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.AddActive)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.AddActive)
+                        @Html.ValidationMessageFor(model => model.AddActive)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.AddEvalType)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(model => model.AddEvalType, Model.AvailableEvaluationTypes)
+                        @Html.ValidationMessageFor(model => model.AddEvalType)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.AddName)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.EditorFor(model => model.AddName)
+                        @Html.ValidationMessageFor(model => model.AddName)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.AddExpression)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.AddExpression, new { style = "Width: 90%;" })
+                        @Html.ValidationMessageFor(model => model.AddExpression)
+                    </div>
+                </div>
+                <div class="form-group" id="pnlOptionRate">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.AddRateExpression)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.AddRateExpression, new { style = "Width: 90%;" })
+                        @Html.ValidationMessageFor(model => model.AddRateExpression)
+                    </div>
+                </div>
+                <div class="form-group" id="pnlPackingMethod">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.AddPackingMethod)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.AddPackingMethod, new { style = "Width: 90%;" })
+                        @Html.ValidationMessageFor(model => model.AddPackingMethod)
+                    </div>
+                </div>
+                <div class="form-group" id="pnlOptionSurcharge">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.AddSurchargeExpression)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.AddSurchargeExpression, new { style = "Width: 90%;" })
+                        @Html.ValidationMessageFor(model => model.AddSurchargeExpression)
+                    </div>
+                </div>
+                <div class="form-group" id="pnlPackingRequiresOwnPackage">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.AddPackingRequiresOwnPackageExpression)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.AddPackingRequiresOwnPackageExpression, new { style = "Width: 90%;" })
+                        @Html.ValidationMessageFor(model => model.AddPackingRequiresOwnPackageExpression)
+                    </div>
+                </div>
+                <div class="form-group" id="pnlOptionName">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.AddNameExpression)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.AddNameExpression, new { style = "Width: 90%;" })
+                        @Html.ValidationMessageFor(model => model.AddNameExpression)
+                    </div>
+                </div>
+                <div class="form-group" id="pnlPackingSender">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.AddPackingSenderExpression)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.AddPackingSenderExpression, new { style = "Width: 90%;" })
+                        @Html.ValidationMessageFor(model => model.AddPackingSenderExpression)
+                    </div>
+                </div>
+                <div class="form-group" id="pnlPackingExcludeItem">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.AddPackingExcludeItemExpression)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.AddPackingExcludeItemExpression, new { style = "Width: 90%;" })
+                        @Html.ValidationMessageFor(model => model.AddPackingExcludeItemExpression)
+                    </div>
+                </div>
+                <div class="form-group" id="pnlOptionDescription">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.AddDescriptionExpression)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.TextBoxFor(model => model.AddDescriptionExpression, new { style = "Width: 90%;" })
+                        @Html.ValidationMessageFor(model => model.AddDescriptionExpression)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        &nbsp;
+                    </div>
+                    <div class="col-md-9">
+                        <input type="button" id="addshippingDirectorrecord" class="btn btn-primary" value="@T("Admin.Common.AddNew")" />
+                        <button type="button" class="k-button" onclick="javascript:clearFields();" >@T("Admin.Common.Clear")</button>
+
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                $('#addshippingDirectorrecord').click(function () {
+
+                                    var postData = $(this.form).serialize();
+                                    addAntiForgeryToken(postData);
+
+                                    $.ajax({
+                                        cache: false,
+                                        type: 'POST',
+                                        url: '@Url.RouteUrl("Plugin.Shipping.Director.AddShippingDirectorRecord")',
+                                        data: postData,
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            $('#shipping-rate-grid').data('kendoGrid').dataSource.read();
+                                            $('#shipping-rate-grid').data('kendoGrid').refresh();
+                                        },
+                                        error: function (xhr, ajaxOptions, thrownError) {
+                                            alert('Failed to add record.');
+                                        }
+                                    });
+                                    return false;
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+        </div>
+    </div>
+    </div>
+    
+        <div class="panel panel-default">
+            <div class="panel-body">
+                <legend><span style="font-weight: bold">@T("admin.configuration.settings")</span></legend>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.UseWarehouseLocation)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.UseWarehouseLocation)
+                        @Html.ValidationMessageFor(model => model.UseWarehouseLocation)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.EvaluationMatchType)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.DropDownListFor(model => model.EvaluationMatchType, Model.AvailableEvaluationMatchTypes)
+                        @Html.ValidationMessageFor(model => model.EvaluationMatchType)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.Surcharge)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.Surcharge)
+                        @Html.ValidationMessageFor(model => model.Surcharge)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        @Html.NopLabelFor(model => model.SortExpression)
+                    </div>
+                    <div class="col-md-9">
+                        @Html.NopEditorFor(model => model.SortExpression)
+                        @Html.ValidationMessageFor(model => model.SortExpression)
+                    </div>
+                </div>
+                <div class="form-group">
+                    <div class="col-md-3">
+                        &nbsp;
+                    </div>
+                    <div class="col-md-9">
+                        <input type="button" id="savegeneralsettings" class="btn btn-primary" value="@T("Admin.Common.Save")" />
+
+                        <script type="text/javascript">
+                            $(document).ready(function () {
+                                $('#savegeneralsettings').click(function () {
+
+                                    var postData = $(this.form).serialize();
+                                    addAntiForgeryToken(postData);
+
+                                    $.ajax({
+                                        cache: false,
+                                        type: 'POST',
+                                        url: '@Url.RouteUrl("Plugin.Shipping.Director.SaveGeneralSettings")',
+                                        data: postData,
+                                        dataType: 'json',
+                                        success: function (data) {
+                                            alert('Saved');
+                                        },
+                                        error: function (xhr, ajaxOptions, thrownError) {
+                                            alert('Failed to add record.');
+                                        }
+                                    });
+                                    return false;
+                                });
+                            });
+                        </script>
+                    </div>
+                </div>
+            </div>
+        </div>    
+}
+
+
+@*import form*@
+<div id="import-window" style="display:none;">
+    @* @using (Html.BeginForm(null, null, FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {*@
+    <form action="/Admin/Shipping/ConfigureProvider?systemName=Shipping.Director" enctype="multipart/form-data" method="post">
+        @Html.AntiForgeryToken()    
+
+        <table style="text-align: left;">
+            <tr>
+                <td>
+                    @T("Plugins.Shipping.Director.DeleteAll"):
+                </td>
+                <td>
+                    <input type="checkbox" class="check-box" id="deleteall" name="deleteall" value="yes">
+                </td>
+            </tr>
+            <tr>
+                <td>
+                    @T("Plugins.Shipping.Director.ImportFile"):
+                </td>
+                <td>
+                    <input type="file" id="importfile" name="importfile" />
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button type="submit" class="btn bg-blue" name="import" value="import" >@T("Plugins.Shipping.Director.Import")</button>
+                </td>
+            </tr>
+        </table>
+    </form>
+    @*}*@
+</div>
+
+
+@*test form*@
+<div id="test-window" style="display:none;">
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()    
+        
+        <table style="text-align: left;">
+            @*!!! determine how to programmatically change store context
+            <tr>
+                <td class="adminTitle">
+                    <img alt="@T("Plugins.Shipping.Director.Test.StoreInput.Hint")" src="/Administration/Content/images/ico-help.gif" title="@T("Plugins.Shipping.Director.Test.StoreInput.Hint")"/>
+                    <label for="storeinput" title="@T("Plugins.Shipping.Director.Test.StoreInput")">@T("Plugins.Shipping.Director.Test.StoreInput")</label>:
+                </td>
+                <td class="adminData">
+                    <input id="storeinput" name="storeinput" type="text" style="width:200px" value="0"/>
+                </td>
+            </tr>
+            *@
+            <tr>
+                <td class="adminTitle" colspan="2">
+                    @T("Plugins.Shipping.Director.Test.StoreInput.Hint")<br />
+                    @T("Plugins.Shipping.Director.Test.CustomerInput.Hint")
+                </td>
+            </tr>
+
+            <tr>
+                <td class="adminTitle">
+                    <div class="fa fa-question-circle" title="@T("Plugins.Shipping.Director.Test.CustomerInput.Hint")" ></div>
+                    <label for="customerinput" title="@T("Plugins.Shipping.Director.Test.CustomerInput")">@T("Plugins.Shipping.Director.Test.CustomerInput")</label>:
+                </td>
+                <td class="adminData">
+                    <input id="customerinput" name="customerinput" type="text" style="width:200px" value="0"/>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <button type="submit" class="btn bg-blue" name="testrules" value="testrules" >@T("Plugins.Shipping.Director.Test.Run")</button>
+                </td>
+            </tr>
+            <tr>
+                <td colspan="2">
+                    <br/>
+                    <div style="color:red">@T("Plugins.Shipping.Director.Test.TestResultsDisclaimer")</div>
+                </td>
+            </tr>
+        </table>
+    }
+</div>
+
+<script type="text/javascript">
+    $(document).ready(function () {
+        $("#import").click(function (e) {
+            e.preventDefault();
+            var window = $("#import-window");
+            if (!window.data("kendoWindow")) {
+                window.kendoWindow({
+                    modal: true,
+                    width: "430px",
+                    title: "@T("Plugins.Shipping.Director.Import")",
+                    actions: ["Close"]
+                });
+            }
+            window.data('kendoWindow').center().open();
+        });
+
+        $("#testrules").click(function (e) {
+            e.preventDefault();
+            var window = $("#test-window");
+            if (!window.data("kendoWindow")) {
+                window.kendoWindow({
+                    modal: true,
+                    width: "470px",
+                    title: "@T("Plugins.Shipping.Director.Test")",
+                    actions: ["Close"]
+                });
+            }
+            window.data('kendoWindow').center().open();
+        });
+    });
+</script>

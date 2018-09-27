@@ -1,0 +1,68 @@
+﻿@model ConfigurationModel
+
+@using Nop.Plugin.Comelite.UniversalConnector.Models;
+@using Nop.Web.Framework;
+@{
+    Layout = "";    
+}
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()   
+    
+    
+    @Html.Action("StoreScopeConfiguration", "Setting", new { area = "Admin" })  
+    
+
+    <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <p>
+                        <a href="https://comelite.net/universal" target="_blank">Universal</a> allows you to chat with your online customers from your mobile while they visit your website. It's a free service installed on your Telegram messenger.<br />
+                        <br />
+                        Follow the next steps to add Universal Chat to your website:<br />
+                        <ul>
+                            <li>
+                                <a href="https://comelite.net/universal/registrations/add" target="_blank">
+                                    Create a Universal Chat account
+                                </a>
+                            </li>
+                            <li>
+                                <a href="https://comelite.net/universal/pages/singleaccount" target="_blank">
+                                    Setup your account
+                                </a>
+                            </li>
+                            <li>Copy the HTML Widget Code into the 'Html Widget Code' box below</li>
+                            <li>Click the 'Save' button below and Universal Chat will be integrated into your store</li>
+                        </ul>
+                    </p>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            @Html.OverrideStoreCheckboxFor(model => model.HtmlWidgetCode_OverrideForStore, model => model.HtmlWidgetCode, Model.ActiveStoreScopeConfiguration)
+                            @Html.NopLabelFor(model => model.HtmlWidgetCode)
+                        </div>
+                        <div class="col-md-9">
+                            @Html.NopTextAreaFor(model => model.HtmlWidgetCode, new {style = "height:350px" })
+                            @Html.ValidationMessageFor(model => model.HtmlWidgetCode)
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <div class="form-group">
+                        <div class="col-md-3">
+                            &nbsp;
+                        </div>
+                        <div class="col-md-9">
+                            <input type="submit" name="save" class="btn bg-blue" value="@T("Admin.Common.Save")" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+}
+

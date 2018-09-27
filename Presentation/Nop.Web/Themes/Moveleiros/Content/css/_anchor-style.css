@@ -1,0 +1,14 @@
+﻿a:hover {
+    color: #c9c9c9;
+    -moz-transition: .2s;
+    -o-transition: .2s;
+    -webkit-transition: .2s;
+    transition: .2s;
+}
+
+a {
+    -moz-transition: .2s;
+    -o-transition: .2s;
+    -webkit-transition: .2s;
+    transition: .2s;
+}

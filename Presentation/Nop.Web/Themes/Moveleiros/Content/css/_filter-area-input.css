@@ -1,0 +1,11 @@
+﻿.double-inputs .area-range input {
+    width: 50%;
+}
+
+.double-inputs .area-from {
+    margin-right: 2px;
+}
+
+.double-inputs .area-to {
+    margin-left: 2px;
+}

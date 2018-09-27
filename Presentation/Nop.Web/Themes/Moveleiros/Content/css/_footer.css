@@ -1,0 +1,15 @@
+﻿.footer {
+    background: #275166;
+    border-top: 10px solid #4a8eb3;
+    color: #fff;
+}
+
+.footer strong {
+    color: #fff;
+}
+
+@media (max-width: 768px) {
+    .footer-block .list {
+        color: #333;
+    }
+}

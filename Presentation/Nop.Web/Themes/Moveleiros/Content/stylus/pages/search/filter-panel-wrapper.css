@@ -1,0 +1,26 @@
+﻿.filter-panel-wrapper {
+  width: 250px;
+  margin-right: 8px;
+}
+.geo-location-parent {
+  display: flex;
+  align-items: center;
+  margin-top: 10px;
+}
+.geo-location-parent i {
+  margin-left: 10px;
+}
+.geo-location-parent .get-location {
+  color: #4a8eb3;
+  border-color: #20a0ff;
+  font-weight: 600;
+  font-size: 14px;
+}
+.geo-location-parent .get-location:hover {
+  color: #4db3ff;
+}
+@media screen and (max-width: 1000px) {
+  .filter-panel-wrapper {
+    display: none !important;
+  }
+}
